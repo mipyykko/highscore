@@ -17,6 +17,12 @@ public class UserType extends AbstractPersistable<Long> {
     
     public String type;
 
+    public UserType() {}
+    
+    public UserType(String type) {
+        this.type = type;
+    }
+    
     public String getType() {
         return type;
     }

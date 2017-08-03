@@ -23,11 +23,12 @@ public class Score extends AbstractPersistable<Long> {
     @ManyToOne(fetch = FetchType.EAGER)
     private Game game;
     @ManyToOne(fetch = FetchType.EAGER)
-    private Customer customer;
+    private Player player;
     private String score;
     @Temporal(TemporalType.DATE)
     private Date date;
     // private Screenshot screenshot;
+    private Status status;
     
     public Game getGame() {
         return game;
@@ -37,12 +38,12 @@ public class Score extends AbstractPersistable<Long> {
         this.game = game;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public Player getPlayer() {
+        return player;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     public String getScore() {
@@ -60,6 +61,16 @@ public class Score extends AbstractPersistable<Long> {
     public void setDate(Date date) {
         this.date = date;
     }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
     
-    
+    public enum Status {
+        PENDING, REJECTED, ACCEPTED
+    }
 }

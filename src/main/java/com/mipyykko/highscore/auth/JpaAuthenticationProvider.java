@@ -5,8 +5,8 @@
  */
 package com.mipyykko.highscore.auth;
 
-import com.mipyykko.highscore.domain.Customer;
-import com.mipyykko.highscore.repository.CustomerRepository;
+import com.mipyykko.highscore.domain.Player;
+import com.mipyykko.highscore.repository.PlayerRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,14 +28,14 @@ import org.springframework.stereotype.Component;
 public class JpaAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private PlayerRepository playerRepository;
 
     @Override
     public Authentication authenticate(Authentication a) throws AuthenticationException {
         String username = a.getPrincipal().toString();
         String password = a.getCredentials().toString();
 
-        Customer customer = customerRepository.findByUsername(username);
+        Player customer = playerRepository.findByUsername(username);
 
         if (customer == null) {
             throw new AuthenticationException("Unable to authenticate user " + username) {

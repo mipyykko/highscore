@@ -5,13 +5,13 @@
  */
 package com.mipyykko.highscore.repository;
 
-import com.mipyykko.highscore.domain.Customer;
+import com.mipyykko.highscore.domain.Player;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
  * @author pyykkomi
  */
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
-    Customer findByUsername(String username);
+public interface PlayerRepository extends JpaRepository<Player, Long> {
+    Player findByUsername(String username);
 }

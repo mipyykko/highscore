@@ -21,7 +21,7 @@ public class Game extends AbstractPersistable<Long> {
     
     @Column(unique = true)
     private String name;
-    @OneToMany(mappedBy = "score", fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
     private List<Score> scores;
     
     public String getName() {
