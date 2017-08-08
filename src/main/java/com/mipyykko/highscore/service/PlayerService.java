@@ -7,6 +7,7 @@ package com.mipyykko.highscore.service;
 
 import com.mipyykko.highscore.domain.Player;
 import com.mipyykko.highscore.repository.PlayerRepository;
+import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -31,5 +32,9 @@ public class PlayerService {
     @Transactional
     public Player save(Player player) {
         return playerRepository.save(player);
+    }
+    
+    public List<Player> getMostActivePlayers() {
+        return playerRepository.findMostActivePlayers();
     }
 }

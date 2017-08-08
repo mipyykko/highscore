@@ -5,19 +5,24 @@
  */
 package com.mipyykko.highscore.controller;
 
+import com.mipyykko.highscore.domain.Game;
 import com.mipyykko.highscore.domain.Player;
+import com.mipyykko.highscore.domain.Score;
 import com.mipyykko.highscore.domain.UserType;
 import com.mipyykko.highscore.repository.UserTypeRepository;
+import com.mipyykko.highscore.service.GameService;
 import com.mipyykko.highscore.service.PlayerService;
+import com.mipyykko.highscore.service.ScoreService;
 import java.util.Arrays;
-import java.util.Optional;
+import java.util.Date;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -29,29 +34,78 @@ public class DefaultController {
     @Autowired
     private PlayerService playerService;
     @Autowired
+    private GameService gameService;
+    @Autowired
+    private ScoreService scoreService;
+    @Autowired
     private UserTypeRepository userTypeRepository;
     
     @PostConstruct
+    @Profile("default")
     public void init() {
         UserType userTypeUser = new UserType("USER");
         UserType userTypeAdmin = new UserType("ADMIN");
         userTypeRepository.save(userTypeUser);
         userTypeRepository.save(userTypeAdmin);
         
-        Player admin = new Player("admin", "password");
+        Player admin = new Player("admin", "password", "Administrator");
         admin.setUserTypes(Arrays.asList(new UserType[]{userTypeUser, userTypeAdmin}));
         
-        Player test1 = new Player("test1", "password");
+        Player test1 = new Player("test1", "password", "Test User 1");
         test1.setUserTypes(Arrays.asList(new UserType[]{userTypeUser}));
 
+        Player test2 = new Player("test2", "password", "Test User 2");
+        test2.setUserTypes(Arrays.asList(new UserType[]{userTypeUser}));
+        
         playerService.save(admin);
         playerService.save(test1);
+        playerService.save(test2);
+        
+        Game game1 = new Game("Peli 1");
+        Game game2 = new Game("Peli 2");
+        
+        gameService.save(game1);
+        gameService.save(game2);
+        
+        Score score1 = new Score(game1, test1, "12320", new Date(System.currentTimeMillis()));
+        Score score2 = new Score(game1, test2, "11000", new Date(System.currentTimeMillis() - 1000));
+        Score score3 = new Score(game2, test1, "100000", new Date(System.currentTimeMillis() - 22222));
+        
+        scoreService.addScore(score1);
+        scoreService.addScore(score2);
+        scoreService.addScore(score3);
+        
+//        scoreService.save(score1);
+//        scoreService.save(score2);
+//        scoreService.save(score3);
+//        
+//        test1.getScores().add(score1);
+//        test2.getScores().add(score2);
+//        test1.getScores().add(score3);
+//
+//        game1.getScores().add(score1);
+//        game1.getScores().add(score2);
+//        game2.getScores().add(score3);
+//
+//        gameService.save(game1);
+//        gameService.save(game2);
+//        
+//        test1.getGames().add(game1);
+//        test1.getGames().add(game2);
+//        test2.getGames().add(game1);
+//        
+//        playerService.save(test1);
+//        playerService.save(test2);
     }
     
     @RequestMapping(value = "/")
     public String index(Model model) {
         Player currentuser = playerService.getAuthenticatedPlayer();
         model.addAttribute("currentuser", currentuser);
+        List<Game> games = gameService.getTopGames();
+        model.addAttribute("games", games);
+        List<Player> players = playerService.getMostActivePlayers();
+        model.addAttribute("players", players);
         return "index";
     }
     

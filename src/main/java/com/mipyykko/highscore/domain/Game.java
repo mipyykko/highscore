@@ -5,7 +5,9 @@
  */
 package com.mipyykko.highscore.domain;
 
+import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,8 +23,18 @@ public class Game extends AbstractPersistable<Long> {
     
     @Column(unique = true)
     private String name;
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Score> scores;
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Score> scores = new ArrayList<>();
+    private ScoreType scoreType;
+    
+    public Game() {
+        this.scoreType = ScoreType.HIGHEST;
+    }
+    
+    public Game(String name) {
+        this();
+        this.name = name;
+    }
     
     public String getName() {
         return name;
@@ -40,4 +52,7 @@ public class Game extends AbstractPersistable<Long> {
         this.scores = scores;
     }
     
+    public enum ScoreType {
+        HIGHEST, LOWEST
+    }
 }

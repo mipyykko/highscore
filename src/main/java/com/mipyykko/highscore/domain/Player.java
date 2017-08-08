@@ -5,7 +5,9 @@
  */
 package com.mipyykko.highscore.domain;
 
+import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,29 +26,28 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
  */
 @Entity
 public class Player extends AbstractPersistable<Long> {
-    
+
     @Column(unique = true)
     @Length(min = 4, max = 24, message = "Käyttäjätunnuksen tulee olla 4-24 merkkiä pitkä")
     private String username;
     private String password;
+    private String name;
     private String salt;
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn
-    private List<Game> games;
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Game> games = new ArrayList<>();
+    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
-    @JoinColumn
-    private List<Score> scores;
+    private List<Score> scores = new ArrayList<>();
     @ManyToMany(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<UserType> userTypes;
     
     public Player() {}
     
-    public Player(String username, String password) {
+    public Player(String username, String password, String name) {
         this.username = username;
         setPassword(password);
-        System.out.println(this.password);
+        this.name = name;
     }
     
     public String getUsername() {
@@ -64,6 +65,14 @@ public class Player extends AbstractPersistable<Long> {
     public void setPassword(String password) {
         this.salt = BCrypt.gensalt();
         this.password = BCrypt.hashpw(password, this.salt);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getSalt() {

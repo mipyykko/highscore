@@ -7,7 +7,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>My Secret Spot Ui Kit Flat Bootstrap Responsive Website Template | Home :: w3layouts</title>
+        <title>HighScore</title>
         <link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
         <!-- Custom Theme files -->
         <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
@@ -81,7 +81,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                             <div class="weather_by_days" th:each="game : ${games}">
                                 <div class="weather_by_day">
                                     <p class="w-day"><span th:text="${game.name}">game</span></p>
-                                    <p class="w-num"><span th:text="${game.players.size()}">0</span></p>
+                                    <p class="w-num"><span th:text="${game.scores.size()}">0</span></p>
                                     <div class="clearfix"></div>
                                 </div>
                             </div>
@@ -166,8 +166,16 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                     <div class="col-md-6">
                         
                     </div>
-                    <div class="col-md-3 spanthird">
-                        <div class="span1">  
+                    <div class="col-md-6 spanthird">
+                        <div class="span1">
+                            <h3 class="tlt">Most active players</h3>
+                            <div class="weather_by_days" th:each="player : ${players}">
+                                <p class="w-day"><span th:text="${player.name}">game</span></p>
+                                <p class="w-num"><span th:text="${player.scores.size()}">0</span></p>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+<!--                        <div class="span1">  
                             <h3 class="tlt">STATISTICS</h3>
                             <canvas id="line" height="300" width="400" style="width: 400px; height: 300px;"></canvas>
                             <script>
@@ -194,7 +202,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                 new Chart(document.getElementById("line").getContext("2d")).Line(lineChartData);
 
                             </script>
-                        </div> 
+                        </div> -->
                         <div class="user-login">
                             <h3 class="tlt">User Login</h3>
                             <div class="login-form">

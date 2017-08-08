@@ -6,6 +6,7 @@
 package com.mipyykko.highscore.domain;
 
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -20,7 +21,8 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 @Entity
 public class Score extends AbstractPersistable<Long> {
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, 
+              cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE})
     private Game game;
     @ManyToOne(fetch = FetchType.EAGER)
     private Player player;
@@ -29,6 +31,18 @@ public class Score extends AbstractPersistable<Long> {
     private Date date;
     // private Screenshot screenshot;
     private Status status;
+    
+    public Score() {
+        this.status = Status.PENDING;
+    }
+    
+    public Score(Game game, Player player, String score, Date date) {
+        this();
+        this.game = game;
+        this.player = player;
+        this.score = score;
+        this.date = date;
+    }
     
     public Game getGame() {
         return game;

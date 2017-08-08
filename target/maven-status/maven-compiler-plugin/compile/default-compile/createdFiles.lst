@@ -6,11 +6,14 @@ com/mipyykko/highscore/config/DefaultSecurityConfiguration$AuthenticationConfigu
 com/mipyykko/highscore/config/ProductionProfile.class
 com/mipyykko/highscore/domain/Score$Status.class
 com/mipyykko/highscore/auth/JpaAuthenticationProvider$1.class
+com/mipyykko/highscore/controller/GameController.class
+com/mipyykko/highscore/service/ScoreService.class
 com/mipyykko/highscore/config/ProductionSecurityConfiguration.class
 com/mipyykko/highscore/config/DefaultSecurityConfiguration.class
 com/mipyykko/highscore/controller/PlayerController.class
 com/mipyykko/highscore/domain/Player.class
 com/mipyykko/highscore/domain/Game.class
+com/mipyykko/highscore/service/GameService.class
 com/mipyykko/highscore/repository/ScoreRepository.class
 com/mipyykko/highscore/Application.class
 com/mipyykko/highscore/controller/DefaultController.class
