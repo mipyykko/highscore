@@ -74,29 +74,7 @@ public class DefaultController {
         scoreService.addScore(score1);
         scoreService.addScore(score2);
         scoreService.addScore(score3);
-        
-//        scoreService.save(score1);
-//        scoreService.save(score2);
-//        scoreService.save(score3);
-//        
-//        test1.getScores().add(score1);
-//        test2.getScores().add(score2);
-//        test1.getScores().add(score3);
-//
-//        game1.getScores().add(score1);
-//        game1.getScores().add(score2);
-//        game2.getScores().add(score3);
-//
-//        gameService.save(game1);
-//        gameService.save(game2);
-//        
-//        test1.getGames().add(game1);
-//        test1.getGames().add(game2);
-//        test2.getGames().add(game1);
-//        
-//        playerService.save(test1);
-//        playerService.save(test2);
-    }
+        }
     
     @RequestMapping(value = "/")
     public String index(Model model) {

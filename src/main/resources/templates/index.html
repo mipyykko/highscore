@@ -8,11 +8,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <title>HighScore</title>
-        <link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+        <link th:href="@{/css/bootstrap.css}" rel='stylesheet' type='text/css' />
         <!-- Custom Theme files -->
-        <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+        <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css" media="all" />
         <!-- Custom Theme files -->
-        <script src="js/jquery.min.js"></script>
+        <script th:src="@{/js/jquery.min.js}"></script>
         <!-- Custom Theme files -->
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -22,14 +22,14 @@ License URL: http://creativecommons.org/licenses/by/3.0/
         <!--webfont-->
         <link href='//fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css' />
         <!-- chart -->
-        <script src="js/Chart.js"></script>
+        <script th:src="@{/js/Chart.js}"></script>
         <!-- //chart -->    
         <!-- Calender -->
-        <link rel="stylesheet" href="css/clndr.css" type="text/css" />
-        <script src="js/underscore-min.js" type="text/javascript"></script>
-        <script src= "js/moment-2.2.1.js" type="text/javascript"></script>
-        <script src="js/clndr.js" type="text/javascript"></script>
-        <script src="js/site.js" type="text/javascript"></script>
+        <link rel="stylesheet" th:href="@{/css/clndr.css}" type="text/css" />
+        <script th:src="@{/js/underscore-min.js}" type="text/javascript"></script>
+        <script th:src="@{/js/moment-2.2.1.js}" type="text/javascript"></script>
+        <script th:src="@{/js/clndr.js}" type="text/javascript"></script>
+        <script th:src="@{js/site.js}" type="text/javascript"></script>
         <!-- End Calender -->
     </head>
     <body>

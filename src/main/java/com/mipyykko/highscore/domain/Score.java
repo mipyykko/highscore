@@ -19,7 +19,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
  * @author pyykkomi
  */
 @Entity
-public class Score extends AbstractPersistable<Long> {
+public class Score extends AbstractPersistable<Long> implements Comparable<Score> {
     
     @ManyToOne(fetch = FetchType.EAGER, 
               cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE})
@@ -82,6 +82,14 @@ public class Score extends AbstractPersistable<Long> {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    @Override
+    public int compareTo(Score o) {
+        if (this.game.getScoreType() == Game.ScoreType.LOWEST) {
+            return this.score.compareTo(o.score);
+        }
+        return o.score.compareTo(this.score);
     }
     
     public enum Status {

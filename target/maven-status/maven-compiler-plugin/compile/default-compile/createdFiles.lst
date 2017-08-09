@@ -11,6 +11,7 @@ com/mipyykko/highscore/service/ScoreService.class
 com/mipyykko/highscore/config/ProductionSecurityConfiguration.class
 com/mipyykko/highscore/config/DefaultSecurityConfiguration.class
 com/mipyykko/highscore/controller/PlayerController.class
+com/mipyykko/highscore/domain/Game$ScoreType.class
 com/mipyykko/highscore/domain/Player.class
 com/mipyykko/highscore/domain/Game.class
 com/mipyykko/highscore/service/GameService.class

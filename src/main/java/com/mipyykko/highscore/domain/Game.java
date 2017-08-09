@@ -23,7 +23,7 @@ public class Game extends AbstractPersistable<Long> {
     
     @Column(unique = true)
     private String name;
-    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Score> scores = new ArrayList<>();
     private ScoreType scoreType;
     
@@ -50,6 +50,14 @@ public class Game extends AbstractPersistable<Long> {
 
     public void setScores(List<Score> scores) {
         this.scores = scores;
+    }
+
+    public ScoreType getScoreType() {
+        return scoreType;
+    }
+
+    public void setScoreType(ScoreType scoreType) {
+        this.scoreType = scoreType;
     }
     
     public enum ScoreType {
