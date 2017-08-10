@@ -1,3 +1,9 @@
+<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
@@ -27,22 +33,22 @@
         <!-- End Calender -->
     </head>
     <body>
+        <!--                <div class="logo text-center">
+                            <a href="index.html"><img src="images/logo.png" alt="" /></a>
+                        </div>-->
+
+        <!--/.navbar-->
         <div th:replace="fragments/header :: header(currentuser=${currentuser})"></div>
-        <!-- profile? -->
         <div class="content">
             <div class="container">
                 <div class="span_1_by_4">
-                    <div class="col-md-6 spansecound">
+                    <div class="col-lg-12 spanfirst">
                         <div class="span1">
-                            <h3 th:text="${game.name}">name</h3>
-                            <h5 th:text="${game.publisher}">publisher</h5>
-                            <h6 th:text="${game.year}">year</h6>
-                            <div class="weather_by_days" th:each="score : ${game.scores}">
-                                <div class="weather_by_day">
-                                    <p class="w_day"><span th:text="${score.player.name}">name</span></p>
-                                    <p class="w_num"><span th:text="${score.score}">score</span></p>
-                                    <div class="clearfix"></div>
-                                </div>
+                            <h3>Players</h3>
+                            <div class="weather-by-days" th:each="player : ${players}">
+                                <p class="w-day"><a th:href="@{/profile/{id}(id = ${player.id})}"><span th:text="${player.username}">username</span></a></p>
+                                <p class="w-num"></p>
+                                <div class="clearfix"></div>
                             </div>
                         </div>
                     </div>

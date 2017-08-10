@@ -29,6 +29,10 @@ public class PlayerService {
         return playerRepository.findByUsername(authentication.getName());
     }    
     
+    public Player get(Long id) {
+        return playerRepository.findOne(id);
+    }
+    
     @Transactional
     public Player save(Player player) {
         return playerRepository.save(player);
@@ -36,5 +40,9 @@ public class PlayerService {
     
     public List<Player> getMostActivePlayers() {
         return playerRepository.findMostActivePlayers();
+    }
+    
+    public List<Player> getPlayers() {
+        return playerRepository.findAll();
     }
 }

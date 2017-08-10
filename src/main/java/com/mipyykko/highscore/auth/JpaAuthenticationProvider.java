@@ -35,23 +35,23 @@ public class JpaAuthenticationProvider implements AuthenticationProvider {
         String username = a.getPrincipal().toString();
         String password = a.getCredentials().toString();
 
-        Player customer = playerRepository.findByUsername(username);
+        Player player = playerRepository.findByUsername(username);
 
-        if (customer == null) {
+        if (player == null) {
             throw new AuthenticationException("Unable to authenticate user " + username) {
             };
         }
 
-        if (!BCrypt.hashpw(password, customer.getSalt()).equals(customer.getPassword())) {
+        if (!BCrypt.hashpw(password, player.getSalt()).equals(player.getPassword())) {
             throw new AuthenticationException("Unable to authenticate user " + username) {
             };
         }
 
         List<SimpleGrantedAuthority> grantedAuths = 
-                customer.getUserTypes().stream().map(type -> new SimpleGrantedAuthority(type.getType())).collect(Collectors.toList());
+                player.getUserTypes().stream().map(type -> new SimpleGrantedAuthority(type.getType())).collect(Collectors.toList());
         //grantedAuths.add(new SimpleGrantedAuthority("USER"));
 
-        return new UsernamePasswordAuthenticationToken(customer.getUsername(), password, grantedAuths);
+        return new UsernamePasswordAuthenticationToken(player.getUsername(), password, grantedAuths);
     }
 
     @Override

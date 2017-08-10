@@ -23,6 +23,8 @@ public class Game extends AbstractPersistable<Long> {
     
     @Column(unique = true)
     private String name;
+    private String publisher;
+    private String year;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Score> scores = new ArrayList<>();
     private ScoreType scoreType;
@@ -31,9 +33,11 @@ public class Game extends AbstractPersistable<Long> {
         this.scoreType = ScoreType.HIGHEST;
     }
     
-    public Game(String name) {
+    public Game(String name, String publisher, String year) {
         this();
         this.name = name;
+        this.publisher = publisher;
+        this.year = year;
     }
     
     public String getName() {
@@ -46,6 +50,22 @@ public class Game extends AbstractPersistable<Long> {
 
     public List<Score> getScores() {
         return scores;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
     }
 
     public void setScores(List<Score> scores) {

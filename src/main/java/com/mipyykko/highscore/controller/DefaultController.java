@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author pyykkomi
  */
 @Controller
+@RequestMapping("*")
 public class DefaultController {
     
     @Autowired
@@ -61,8 +62,8 @@ public class DefaultController {
         playerService.save(test1);
         playerService.save(test2);
         
-        Game game1 = new Game("Peli 1");
-        Game game2 = new Game("Peli 2");
+        Game game1 = new Game("Peli 1", "Game Company", "1998");
+        Game game2 = new Game("Peli 2", "Game Company", "2012");
         
         gameService.save(game1);
         gameService.save(game2);

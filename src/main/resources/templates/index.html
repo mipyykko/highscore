@@ -42,23 +42,23 @@ License URL: http://creativecommons.org/licenses/by/3.0/
         <div class="content">
             <div class="container">
                 <div class="span_1_by_4">
-                    <div class="col-md-12 spanfirst" th:if="${currentuser}">
+                    <div class="col-md-12 spanfirst" sec:authorize="isAuthenticated()">
                         <div class="profile">                    
                             <h3 class="tlt">Profile</h3>
-                            <h4 th:text="${currentuser.username}">Erica Example</h4>
+                            <h4 th:text="${#authentication.getPrincipal()}">Erica Example</h4>
 <!--                            <p>Here stands a little description about Erica Example. Lorem ipsum dolor sunt.</p>
                             <img src="images/profile.jpg" alt="" />-->
                             <div class="followers">
                                 <ul>
                                     <li>
-                                        <h3 th:text="${currentuser.games.size()}">0</h3>
+                                        <!--<h3 th:text="${#authentication.getPrincipal().getGames().size()}">0</h3>-->
                                         <p>Games</p>
                                     </li>
                                 </ul>
                                 <div class="clearfix"></div>
                             </div>
                             <div class="follow">
-                                <a class="f-left" th:href="@{/players/{id}(id = ${currentuser.id})}">To profile...</a>
+                                <a class="f-left" th:href="@{/profile}">To profile...</a>
                                 <div class="clearfix"></div>
                             </div>
                         </div>

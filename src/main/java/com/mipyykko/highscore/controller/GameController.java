@@ -42,8 +42,10 @@ public class GameController {
     
     @RequestMapping(method = RequestMethod.POST)
     public String saveGame(@RequestParam String name, 
+            @RequestParam String publisher,
+            @RequestParam String year,
             @RequestParam(required = false, defaultValue = "0") Long id) {
-        Game game = id > 0 ? gameService.get(id) : new Game(name);
+        Game game = id > 0 ? gameService.get(id) : new Game(name, publisher, year);
         
         if (game != null) {
             gameService.save(game);
