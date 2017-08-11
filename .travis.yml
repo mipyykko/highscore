@@ -16,3 +16,10 @@ addons:
     packages:
       - libstdc++-4.9-dev
       - google-chrome-stable
+      
+install:
+- mvn test-compile -Dskip-tests=true -Dmaven.javadoc.skip=true -B -V
+script:
+- mvn test jacoco:report
+after_success:
+- mvn coveralls:report
