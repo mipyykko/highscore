@@ -6,8 +6,11 @@
 package com.mipyykko.highscore.controller;
 
 import com.mipyykko.highscore.domain.Player;
+import com.mipyykko.highscore.domain.Score;
 import com.mipyykko.highscore.service.PlayerService;
+import com.mipyykko.highscore.service.ScoreService;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,34 +27,28 @@ public class PlayerController {
     
     @Autowired
     private PlayerService playerService;
+    @Autowired
+    private ScoreService scoreService;
     
-    @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public String ownProfile(Model model) {
-        Player player = playerService.getAuthenticatedPlayer();
+    @RequestMapping(value = {"/profile", "/profile/{id}"}, method = RequestMethod.GET)
+    public String getProfile(Model model, @PathVariable Map<String, String> pathVariables) {
+        Player player = null;
+        if (pathVariables.containsKey("id")) {
+            player = playerService.get(Long.parseLong(pathVariables.get("id")));
+        } else {
+            player = playerService.getAuthenticatedPlayer();
+        }
         
         if (player == null) {
             return "redirect:/";
         }
         
         model.addAttribute("player", player);
-        // TODO: get highest scores
-        model.addAttribute("highscores", null);
+        List<Score> highScores = scoreService.getTopScoresByPlayer(player.getId());
+        model.addAttribute("highscores", highScores.size());
         return "player";
     }
     
-    @RequestMapping(value = "/profile/{id}", method = RequestMethod.GET)
-    public String otherProfile(Model model, @PathVariable Long id) {
-        Player player = playerService.get(id);
-        
-        if (player == null) {
-            return "redirect:/";
-        }
-        
-        model.addAttribute("player", player);
-        // TODO: get highest scores
-        model.addAttribute("highscores", null);
-        return "player";
-    }
     @RequestMapping(value = "/players", method = RequestMethod.GET)
     public String getPlayers(Model model) {
         List<Player> players = playerService.getPlayers();

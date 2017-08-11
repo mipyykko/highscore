@@ -11,6 +11,9 @@ import com.mipyykko.highscore.domain.Score;
 import com.mipyykko.highscore.repository.GameRepository;
 import com.mipyykko.highscore.repository.PlayerRepository;
 import com.mipyykko.highscore.repository.ScoreRepository;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,14 +24,14 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 public class ScoreService {
-    
+
     @Autowired
     private GameRepository gameRepository;
     @Autowired
     private PlayerRepository playerRepository;
     @Autowired
     private ScoreRepository scoreRepository;
-    
+
     @Transactional
     public Score addScore(Score score) {
         Game game = gameRepository.findByName(score.getGame().getName());
@@ -36,9 +39,9 @@ public class ScoreService {
         if (game == null || player == null) {
             return null;
         }
-        
+
         scoreRepository.save(score);
-        
+
         game.getScores().add(score);
         player.getScores().add(score);
         if (!player.getGames().contains(game)) {
@@ -46,11 +49,26 @@ public class ScoreService {
         }
         gameRepository.save(game);
         playerRepository.save(player);
-        
+
         return score;
     }
-    
+
     public Score save(Score score) {
         return scoreRepository.save(score);
+    }
+
+    public List<Score> getTopScoresByPlayer(Long id) {
+        Player player = playerRepository.findOne(id);
+        List<Score> topScores = new ArrayList<>();
+
+        if (player != null) {
+            for (Game game : player.getGames()) {
+                Collections.sort(game.getScores());
+                if (game.getScores() != null && game.getScores().get(0).getPlayer() == player) {
+                    topScores.add(game.getScores().get(0));
+                }
+            }
+        }
+        return topScores;
     }
 }

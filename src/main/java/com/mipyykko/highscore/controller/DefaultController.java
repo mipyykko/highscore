@@ -49,13 +49,14 @@ public class DefaultController {
         userTypeRepository.save(userTypeUser);
         userTypeRepository.save(userTypeAdmin);
         
-        Player admin = new Player("admin", "password", "Administrator");
+        Player admin = new Player("admin", "password", "Administrator", "admin@mail.com", "Administrator");
         admin.setUserTypes(Arrays.asList(new UserType[]{userTypeUser, userTypeAdmin}));
         
-        Player test1 = new Player("test1", "password", "Test User 1");
+        Player test1 = new Player("test1", "password", "Test User 1", "test1@mail.com", 
+                "This is a long description. This is a long description. This is a long description. This is a long description. This is a long description.");
         test1.setUserTypes(Arrays.asList(new UserType[]{userTypeUser}));
 
-        Player test2 = new Player("test2", "password", "Test User 2");
+        Player test2 = new Player("test2", "password", "Test User 2", "test2@mail.com", "");
         test2.setUserTypes(Arrays.asList(new UserType[]{userTypeUser}));
         
         playerService.save(admin);
@@ -65,17 +66,22 @@ public class DefaultController {
         Game game1 = new Game("Peli 1", "Game Company", "1998");
         Game game2 = new Game("Peli 2", "Game Company", "2012");
         
+        game1.setScoreType(Game.ScoreType.HIGHEST);
+        game2.setScoreType(Game.ScoreType.LOWEST);
+        
         gameService.save(game1);
         gameService.save(game2);
         
         Score score1 = new Score(game1, test1, "12320", new Date(System.currentTimeMillis()));
         Score score2 = new Score(game1, test2, "11000", new Date(System.currentTimeMillis() - 1000));
-        Score score3 = new Score(game2, test1, "100000", new Date(System.currentTimeMillis() - 22222));
-        
+        Score score3 = new Score(game2, test2, "100000", new Date(System.currentTimeMillis() - 22222));
+        Score score4 = new Score(game2, test1, "90000", new Date(System.currentTimeMillis() - 3333));
+
         scoreService.addScore(score1);
         scoreService.addScore(score2);
         scoreService.addScore(score3);
-        }
+        scoreService.addScore(score4);
+    }
     
     @RequestMapping(value = "/")
     public String index(Model model) {

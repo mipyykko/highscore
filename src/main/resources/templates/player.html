@@ -34,15 +34,23 @@
                     <div class="col-md-6 spanfirst">
                         <div class="span1">
                             <h3 th:text="${player.username}">username</h3>
-                            <div class="weather-by-days">
-                                <div class="weather-by-day"> 
-                                    <p class="w-day">Name</p>
-                                    <p class="w-num" th:text="${player.name}">name</p>
+                            <div class="profile_info">
+                                <div class="profile_info_entry"> 
+                                    <p class="profile_label">Name</p>
+                                    <div class="clearfix"></div>
+                                    <p class="profile_field" th:text="${player.name}">name</p>
                                     <div class="clearfix"></div>
                                 </div>
-                                <div>
-                                    <p class="w-day">High scores</p>
-                                    <p class="w-num" th:text="${highscores}">0</p>
+                                <div class="profile_info_entry">
+                                    <p class="profile_label">Description</p>
+                                    <div class="clearfix"></div>
+                                    <p class="profile_field" th:text="${player.description}">description</p>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="profile_info_entry">
+                                    <p class="profile_label">High scores</p>
+                                    <div class="clearfix"></div>
+                                    <p class="profile_field" th:text="${highscores}">0</p>
                                     <div class="clearfix"></div>
                                 </div>
                             </div>

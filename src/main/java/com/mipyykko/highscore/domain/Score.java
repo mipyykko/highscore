@@ -5,6 +5,7 @@
  */
 package com.mipyykko.highscore.domain;
 
+import java.util.Comparator;
 import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -86,10 +87,14 @@ public class Score extends AbstractPersistable<Long> implements Comparable<Score
 
     @Override
     public int compareTo(Score o) {
-        if (this.game.getScoreType() == Game.ScoreType.LOWEST) {
-            return this.score.compareTo(o.score);
-        }
-        return o.score.compareTo(this.score);
+        return this.game.getScoreType() == Game.ScoreType.LOWEST
+            ? Comparators.LOWEST.compare(this, o) 
+            : Comparators.HIGHEST.compare(this, o);
+    }
+    
+    public static class Comparators {
+        public static Comparator<Score> HIGHEST = (Score o1, Score o2) -> o1.getScore().compareTo(o2.getScore());
+        public static Comparator<Score> LOWEST = (Score o1, Score o2) -> o2.getScore().compareTo(o1.getScore());
     }
     
     public enum Status {

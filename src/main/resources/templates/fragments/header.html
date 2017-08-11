@@ -32,8 +32,8 @@ and open the template in the editor.
                                     <li><a th:href="@{/}">Home</a></li>
                                     <li><a th:href="@{/games}">Games</a></li>
                                     <li><a th:href="@{/players}">Players</a></li>
-                                    <li th:if="${currentuser}"><a th:href="@{/profile}">My profile</a></li>
-                                    <li th:if="!${currentuser}"><a th:href="@{/register}">Register</a></li>
+                                    <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">My profile</a></li>
+                                    <li sec:authorize="isAnonymous()"><a th:href="@{/register}">Register</a></li>
                                     <!--<li class="dropdown">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">PLACES <b class="caret"></b></a>
                                         <ul class="dropdown-menu multi-column columns-3">
@@ -78,7 +78,7 @@ and open the template in the editor.
                             <!--/.navbar-collapse-->
                         </nav>
                         <div class="nav-right">
-                            <div class="login-pop" th:if="!${currentuser}">
+                            <div class="login-pop" sec:authorize="isAnonymous()">
                                 <div id="loginpop"><a href="#" id="loginButton"><span>Login</span></a>
                                     <div id="loginBox">                
                                         <form id="loginForm" th:action="@{/authenticate}" method="POST">
@@ -98,11 +98,11 @@ and open the template in the editor.
                                         </form>
                                     </div>
                                 </div>
-                                <div class="login-pop" th:if="${currentuser}">
-                                    <div id="loginpop"><a href="#" onclick="document.getElementById('logout-form').submit();">Logout</a></div>
-                                </div>
-                                <form style="visibility: hidden" id ="logout-form" method="post" th:action="@{/logout}"><input type="submit" value="Logout"/></form>                    
                             </div>
+                            <div class="login-pop" sec:authorize="isAuthenticated()">
+                                <div id="loginpop"><a href="#" onclick="document.getElementById('logout-form').submit();"><span>Logout</span></a></div>
+                            </div>
+                            <form style="visibility: hidden" id ="logout-form" method="post" th:action="@{/logout}"><input type="submit" value="Logout"/></form>                    
                             <script src="js/menu_jquery.js"></script>
                             <!--                            <div class="search">
                                                             <form>
