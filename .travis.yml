@@ -17,9 +17,8 @@ addons:
       - libstdc++-4.9-dev
       - google-chrome-stable
       
-install:
-- mvn test-compile -Dskip-tests=true -Dmaven.javadoc.skip=true -B -V
+install: true
 script:
-- mvn test jacoco:report
+- mvn test 
 after_success:
 - mvn clean test jacoco:report coveralls:report
