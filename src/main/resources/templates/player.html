@@ -59,7 +59,7 @@
                     <div class="col-md-6 spansecound">
                         <div class="span1">
                             <h3>Games</h3>
-                            <div class="weather-by-days" th:each="game : ${player.games}">
+                            <div class="weather-by-days" th:each="game : ${games}">
                                 <div class="weather-by-day">
                                     <p class="w-day"><a th:href="@{/games/{id}(id = ${game.id})}"><span th:text="${game.name}">game</span></a></p>
                                     <div class="clearfix"></div>

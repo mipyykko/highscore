@@ -14,6 +14,8 @@ import com.mipyykko.highscore.repository.ScoreRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,9 +46,6 @@ public class ScoreService {
 
         game.getScores().add(score);
         player.getScores().add(score);
-        if (!player.getGames().contains(game)) {
-            player.getGames().add(game);
-        }
         gameRepository.save(game);
         playerRepository.save(player);
 
@@ -62,13 +61,24 @@ public class ScoreService {
         List<Score> topScores = new ArrayList<>();
 
         if (player != null) {
-            for (Game game : player.getGames()) {
+            Set<Game> playerGames = new TreeSet<>();
+            player.getScores().stream().forEach((score) -> {
+                playerGames.add(score.getGame());
+            });
+            playerGames.stream().map((game) -> {
                 Collections.sort(game.getScores());
-                if (game.getScores() != null && game.getScores().get(0).getPlayer() == player) {
-                    topScores.add(game.getScores().get(0));
-                }
-            }
+                return game;
+            }).filter((game) -> 
+                      (game.getScores() != null 
+                    && game.getScores().get(0).getPlayer() == player))
+              .forEach((game) -> {
+                topScores.add(game.getScores().get(0));
+            });
         }
         return topScores;
+    }
+    
+    public List<Score> findByGame(Game game) {
+        return scoreRepository.findByGame(game);
     }
 }

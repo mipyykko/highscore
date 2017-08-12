@@ -29,15 +29,12 @@ public class PlayerController {
     private PlayerService playerService;
     @Autowired
     private ScoreService scoreService;
-    
+
     @RequestMapping(value = {"/profile", "/profile/{id}"}, method = RequestMethod.GET)
     public String getProfile(Model model, @PathVariable Map<String, String> pathVariables) {
-        Player player = null;
-        if (pathVariables.containsKey("id")) {
-            player = playerService.get(Long.parseLong(pathVariables.get("id")));
-        } else {
-            player = playerService.getAuthenticatedPlayer();
-        }
+        Player player = pathVariables.containsKey("id")
+                      ? playerService.get(Long.parseLong(pathVariables.get("id")))
+                      : playerService.getAuthenticatedPlayer();
         
         if (player == null) {
             return "redirect:/";
@@ -46,6 +43,7 @@ public class PlayerController {
         model.addAttribute("player", player);
         List<Score> highScores = scoreService.getTopScoresByPlayer(player.getId());
         model.addAttribute("highscores", highScores.size());
+        model.addAttribute("games", playerService.getGamesByPlayer(player.getId()));
         return "player";
     }
     

@@ -7,11 +7,14 @@ package com.mipyykko.highscore.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 /**
@@ -19,13 +22,14 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
  * @author pyykkomi
  */
 @Entity
-public class Game extends AbstractPersistable<Long> {
+public class Game extends AbstractPersistable<Long> implements Comparable<Game> {
     
     @Column(unique = true)
     private String name;
     private String publisher;
-    private String year;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private String publishedYear;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "game", cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Score> scores = new ArrayList<>();
     private ScoreType scoreType;
     
@@ -33,11 +37,11 @@ public class Game extends AbstractPersistable<Long> {
         this.scoreType = ScoreType.HIGHEST;
     }
     
-    public Game(String name, String publisher, String year) {
+    public Game(String name, String publisher, String publishedYear) {
         this();
         this.name = name;
         this.publisher = publisher;
-        this.year = year;
+        this.publishedYear = publishedYear;
     }
     
     public String getName() {
@@ -60,12 +64,12 @@ public class Game extends AbstractPersistable<Long> {
         this.publisher = publisher;
     }
 
-    public String getYear() {
-        return year;
+    public String getPublishedYear() {
+        return publishedYear;
     }
 
-    public void setYear(String year) {
-        this.year = year;
+    public void setPublishedYear(String publishedYear) {
+        this.publishedYear = publishedYear;
     }
 
     public void setScores(List<Score> scores) {
@@ -79,7 +83,39 @@ public class Game extends AbstractPersistable<Long> {
     public void setScoreType(ScoreType scoreType) {
         this.scoreType = scoreType;
     }
-    
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.name);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Game other = (Game) obj;
+        if (this.getId() != other.getId()) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int compareTo(Game o) {
+        return this.hashCode() - o.hashCode();
+    }
+
+
+
     public enum ScoreType {
         HIGHEST, LOWEST
     }

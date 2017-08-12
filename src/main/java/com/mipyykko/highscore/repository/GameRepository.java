@@ -22,4 +22,5 @@ public interface GameRepository extends JpaRepository<Game, Long> {
     List<Game> findMostPopularGames();
     Game findByName(String name);
     
+    
 }

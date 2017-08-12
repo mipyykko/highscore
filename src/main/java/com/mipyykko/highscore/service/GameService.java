@@ -7,6 +7,7 @@ package com.mipyykko.highscore.service;
 
 import com.mipyykko.highscore.domain.Game;
 import com.mipyykko.highscore.repository.GameRepository;
+import com.mipyykko.highscore.repository.ScoreRepository;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class GameService {
     
     @Autowired
     private GameRepository gameRepository;
+    @Autowired
+    private ScoreRepository scoreRepository;
     
     public Game get(Long id) {
         return gameRepository.findOne(id);
@@ -34,9 +37,9 @@ public class GameService {
         return gameRepository.findMostPopularGames();
     }
     
-    public Page<Game> getGames(int start, int length, String direction, String criteria) {
-        Pageable pageable = new PageRequest(start, 
-                length > 0 ? start + length : start + 25, 
+    public Page<Game> getGames(int page, int length, String direction, String criteria) {
+        Pageable pageable = new PageRequest(page, 
+                length > 0 ? length : 25, 
                 direction.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, 
                 criteria);
         return gameRepository.findAll(pageable);
@@ -45,5 +48,13 @@ public class GameService {
     @Transactional
     public Game save(Game game) {
         return gameRepository.save(game);
+    }
+    
+    @Transactional
+    public Game delete(Game game) {
+        gameRepository.delete(game);
+        game.setScores(null);
+        scoreRepository.deleteByGame(game);
+        return game;
     }
 }

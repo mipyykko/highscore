@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import org.hibernate.annotations.Fetch;
@@ -35,12 +35,12 @@ public class Player extends AbstractPersistable<Long> {
     private String email;
     private String description;
     private String salt;
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Game> games = new ArrayList<>();
-    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "player", orphanRemoval = true, 
+               fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Score> scores = new ArrayList<>();
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER,
+            cascade = {CascadeType.MERGE})
     @Fetch(value = FetchMode.SUBSELECT)
     private List<UserType> userTypes;
     
@@ -109,14 +109,6 @@ public class Player extends AbstractPersistable<Long> {
 
     public void setScores(List<Score> scores) {
         this.scores = scores;
-    }
-
-    public List<Game> getGames() {
-        return games;
-    }
-
-    public void setGames(List<Game> games) {
-        this.games = games;
     }
 
     public List<UserType> getUserTypes() {

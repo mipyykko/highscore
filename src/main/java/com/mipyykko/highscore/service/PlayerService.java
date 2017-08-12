@@ -5,9 +5,11 @@
  */
 package com.mipyykko.highscore.service;
 
+import com.mipyykko.highscore.domain.Game;
 import com.mipyykko.highscore.domain.Player;
 import com.mipyykko.highscore.repository.PlayerRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -38,6 +40,15 @@ public class PlayerService {
         return playerRepository.save(player);
     }
     
+    public List<Game> getGamesByPlayer(Long id) {
+        Player player = playerRepository.findOne(id);
+        
+        if (player == null) {
+            return null;
+        }
+        
+        return player.getScores().stream().map(score -> score.getGame()).distinct().collect(Collectors.toList());
+    }
     public List<Player> getMostActivePlayers() {
         return playerRepository.findMostActivePlayers();
     }

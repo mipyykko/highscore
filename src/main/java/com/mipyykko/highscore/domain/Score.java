@@ -10,6 +10,7 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,10 +23,9 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 @Entity
 public class Score extends AbstractPersistable<Long> implements Comparable<Score> {
     
-    @ManyToOne(fetch = FetchType.EAGER, 
-              cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE})
+    @ManyToOne 
     private Game game;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private Player player;
     private String score;
     @Temporal(TemporalType.DATE)

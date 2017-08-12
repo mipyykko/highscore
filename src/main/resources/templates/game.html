@@ -36,7 +36,7 @@
                         <div class="span1">
                             <h3 th:text="${game.name}">name</h3>
                             <h5 th:text="${game.publisher}">publisher</h5>
-                            <h6 th:text="${game.year}">year</h6>
+                            <h6 th:text="${game.publishedYear}">year</h6>
                             <div class="weather_by_days" th:each="score : ${game.scores}">
                                 <div class="weather_by_day">
                                     <p class="w_day"><span th:text="${score.player.name}">name</span></p>

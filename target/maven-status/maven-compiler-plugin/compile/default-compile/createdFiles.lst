@@ -1,4 +1,5 @@
 com/mipyykko/highscore/domain/UserType.class
+com/mipyykko/highscore/domain/Score$Comparators.class
 com/mipyykko/highscore/auth/JpaAuthenticationProvider$2.class
 com/mipyykko/highscore/auth/JpaAuthenticationProvider.class
 com/mipyykko/highscore/domain/Score.class
