@@ -15,6 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 /**
@@ -24,6 +25,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 @Entity
 public class Game extends AbstractPersistable<Long> implements Comparable<Game> {
     
+    @NotBlank
     @Column(unique = true)
     private String name;
     private String publisher;

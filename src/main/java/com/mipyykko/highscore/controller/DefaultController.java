@@ -5,11 +5,13 @@
  */
 package com.mipyykko.highscore.controller;
 
+import com.mipyykko.highscore.auth.JpaAuthenticationProvider;
 import com.mipyykko.highscore.domain.Game;
 import com.mipyykko.highscore.domain.Player;
+import com.mipyykko.highscore.domain.RegisteringPlayer;
 import com.mipyykko.highscore.domain.Score;
-import com.mipyykko.highscore.domain.UserType;
-import com.mipyykko.highscore.repository.UserTypeRepository;
+//import com.mipyykko.highscore.domain.UserType;
+//import com.mipyykko.highscore.repository.UserTypeRepository;
 import com.mipyykko.highscore.service.GameService;
 import com.mipyykko.highscore.service.PlayerService;
 import com.mipyykko.highscore.service.ScoreService;
@@ -19,10 +21,20 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import static sun.audio.AudioPlayer.player;
 
 /**
  *
@@ -39,25 +51,24 @@ public class DefaultController {
     @Autowired
     private ScoreService scoreService;
     @Autowired
-    private UserTypeRepository userTypeRepository;
+    private JpaAuthenticationProvider jpaAuthenticationProvider;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+//    @Autowired
+//    private UserTypeRepository userTypeRepository;
     
     @PostConstruct
     @Profile("default")
     public void init() {
-        UserType userTypeUser = new UserType("USER");
-        UserType userTypeAdmin = new UserType("ADMIN");
-        userTypeRepository.save(userTypeUser);
-        userTypeRepository.save(userTypeAdmin);
-        
         Player admin = new Player("admin", "password", "Administrator", "admin@mail.com", "Administrator");
-        admin.setUserTypes(Arrays.asList(new UserType[]{userTypeUser, userTypeAdmin}));
+        admin.setUserTypes(Arrays.asList(new Player.UserType[]{Player.UserType.USER, Player.UserType.ADMIN}));
         
         Player test1 = new Player("test1", "password", "Test User 1", "test1@mail.com", 
                 "This is a long description. This is a long description. This is a long description. This is a long description. This is a long description.");
-        test1.setUserTypes(Arrays.asList(new UserType[]{userTypeUser}));
+        test1.setUserTypes(Arrays.asList(new Player.UserType[]{Player.UserType.USER}));
 
         Player test2 = new Player("test2", "password", "Test User 2", "test2@mail.com", "");
-        test2.setUserTypes(Arrays.asList(new UserType[]{userTypeUser}));
+        test2.setUserTypes(Arrays.asList(new Player.UserType[]{Player.UserType.USER}));
         
         playerService.save(admin);
         playerService.save(test1);
@@ -99,4 +110,39 @@ public class DefaultController {
         return "login";
     }
     
+    @RequestMapping(value = "register", method = RequestMethod.GET)
+    public String showRegister(@ModelAttribute RegisteringPlayer registeringPlayer) {
+        if (playerService.getAuthenticatedPlayer() != null) {
+            return "redirect:/";
+        }
+        
+        return "register";
+    }
+    
+    @RequestMapping(value = "register", method = RequestMethod.POST)
+    public String handleRegister(@Validated @ModelAttribute RegisteringPlayer registeringPlayer, BindingResult bindingResult) {
+        if (!registeringPlayer.getPassword().isEmpty() &&
+            !registeringPlayer.getPassword().equals(registeringPlayer.getPasswordagain())) {
+            bindingResult.rejectValue("passwordagain", "error.player", "Must match password!");
+        }
+        if (bindingResult.hasErrors()) {
+            return "register";
+        }
+
+        Player player = new Player(registeringPlayer.getUsername(), registeringPlayer.getPassword(),
+                                   registeringPlayer.getName(), registeringPlayer.getEmail(),
+                                   registeringPlayer.getDescription());
+        player.getUserTypes().add(Player.UserType.USER);
+        playerService.save(player);
+        
+        UsernamePasswordAuthenticationToken token = 
+                new UsernamePasswordAuthenticationToken(player.getUsername(), player.getPassword());
+        Authentication user = authenticationManager.authenticate(token);
+        SecurityContextHolder
+                .getContext()
+                .setAuthentication(
+                        jpaAuthenticationProvider
+                                .authenticate(user));
+        return "redirect:/";
+    }
 }

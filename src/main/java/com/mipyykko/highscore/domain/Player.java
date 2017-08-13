@@ -11,11 +11,13 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -28,10 +30,10 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 public class Player extends AbstractPersistable<Long> {
 
     @Column(unique = true)
-    @Length(min = 4, max = 24, message = "Käyttäjätunnuksen tulee olla 4-24 merkkiä pitkä")
     private String username;
     private String password;
     private String name;
+    @Email
     private String email;
     private String description;
     private String salt;
@@ -39,9 +41,12 @@ public class Player extends AbstractPersistable<Long> {
                fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Score> scores = new ArrayList<>();
-    @ManyToMany(fetch = FetchType.EAGER,
-            cascade = {CascadeType.MERGE})
-    @Fetch(value = FetchMode.SUBSELECT)
+//    @ManyToMany(targetEntity = Player.UserType.class, fetch = FetchType.EAGER,
+//            cascade = {CascadeType.MERGE})
+//    @Fetch(value = FetchMode.SUBSELECT)
+    @Column(name = "usertype")
+    @ElementCollection(targetClass = Player.UserType.class, fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
     private List<UserType> userTypes;
     
     public Player() {}
@@ -117,5 +122,9 @@ public class Player extends AbstractPersistable<Long> {
 
     public void setUserTypes(List<UserType> userTypes) {
         this.userTypes = userTypes;
+    }
+    
+    public enum UserType {
+        USER, ADMIN
     }
 }

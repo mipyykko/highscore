@@ -7,9 +7,9 @@ package com.mipyykko.highscore.config;
 
 import com.mipyykko.highscore.auth.JpaAuthenticationProvider;
 import com.mipyykko.highscore.domain.Player;
-import com.mipyykko.highscore.domain.UserType;
+//import com.mipyykko.highscore.domain.UserType;
 import com.mipyykko.highscore.repository.PlayerRepository;
-import com.mipyykko.highscore.repository.UserTypeRepository;
+//import com.mipyykko.highscore.repository.UserTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -31,8 +31,8 @@ public class DefaultSecurityConfiguration extends WebSecurityConfigurerAdapter {
     
     @Autowired
     private PlayerRepository playerRepository;
-    @Autowired
-    private UserTypeRepository userTypeRepository;
+//    @Autowired
+//    private UserTypeRepository userTypeRepository;
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -43,7 +43,7 @@ public class DefaultSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.formLogin()
                 .loginProcessingUrl("/authenticate")
                 .defaultSuccessUrl("/")
-                .failureForwardUrl("/")
+                .failureForwardUrl("/login?error")
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .permitAll();
