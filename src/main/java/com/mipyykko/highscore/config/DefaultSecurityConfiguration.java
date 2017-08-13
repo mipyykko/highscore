@@ -38,12 +38,12 @@ public class DefaultSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .anyRequest().permitAll()
-                .antMatchers("/login", "/signup", "/static*/**").permitAll()
+                .antMatchers("/login", "/signup", "/register", "/static*/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/", "/games*/**").permitAll();
         http.formLogin()
                 .loginProcessingUrl("/authenticate")
                 .defaultSuccessUrl("/")
-                .failureForwardUrl("/login?error")
+                .failureForwardUrl("/?error")
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .permitAll();

@@ -32,7 +32,7 @@ public class RegisteringPlayer {
     @Length(max = 64, message = "Name must be 64 letters or less!")
     private String name;
     @NotBlank
-    @Length(min = 8, max = 24, message = "Password must be 4 to 24 letters!")
+    @Length(min = 8, max = 24, message = "Password must be 8 to 24 letters!")
     private String password;
     private String passwordagain;
     @Email

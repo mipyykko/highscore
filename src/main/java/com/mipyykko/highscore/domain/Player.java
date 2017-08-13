@@ -33,7 +33,6 @@ public class Player extends AbstractPersistable<Long> {
     private String username;
     private String password;
     private String name;
-    @Email
     private String email;
     private String description;
     private String salt;
@@ -47,7 +46,7 @@ public class Player extends AbstractPersistable<Long> {
     @Column(name = "usertype")
     @ElementCollection(targetClass = Player.UserType.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private List<UserType> userTypes;
+    private List<UserType> userTypes = new ArrayList<>();
     
     public Player() {}
     

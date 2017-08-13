@@ -135,9 +135,7 @@ public class DefaultController {
         player.getUserTypes().add(Player.UserType.USER);
         playerService.save(player);
         
-        UsernamePasswordAuthenticationToken token = 
-                new UsernamePasswordAuthenticationToken(player.getUsername(), player.getPassword());
-        Authentication user = authenticationManager.authenticate(token);
+        Authentication user = new UsernamePasswordAuthenticationToken(player.getUsername(), player.getPassword());
         SecurityContextHolder
                 .getContext()
                 .setAuthentication(
