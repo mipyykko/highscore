@@ -269,7 +269,7 @@ fieldset#body {
     text-align: left;
 }
 
-#loginForm #body fieldset h5 {
+#loginForm #body fieldset .error {
     display: block;
     float: none;
     margin: 0 0 6px 0;
@@ -277,6 +277,14 @@ fieldset#body {
     font-size: 1em;
     color: #FF0000;
 }
+
+#loginForm #body fieldset .message {
+    display: block;
+    float: none;
+    margin: 0 0 6px 0;
+    text-align: left;
+    font-size: 0.8em;
+} 
 
 #loginForm #login {
     width: 100%;

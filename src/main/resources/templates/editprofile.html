@@ -34,8 +34,8 @@
                 <div class="span_1_by_4">
                     <div class="col-md-6 spansecound">
                         <div class="span1">
-                            <h2>Register</h2>
-                            <form id="loginForm" th:action="@{/register}" th:object="${formPlayer}" method="POST">
+                            <h2>Edit profile</h2>
+                            <form id="loginForm" th:action="@{/profile/edit}" th:object="${formPlayer}" method="POST">
                                 <fieldset id="body">
                                     <fieldset>
                                         <label for="username">Username</label>
@@ -53,12 +53,18 @@
                                         <input type="text" th:field="*{email}" />
                                     </fieldset>
                                     <fieldset>
-                                        <label for="password">Password</label>
+                                        <label for="oldpassword">Old password</label>
+                                        <p class="message">Leave these empty for no password change</p>
+                                        <p class="error" th:if="${#fields.hasErrors('oldpassword')}" th:errors="*{oldpassword}">old password error</p>
+                                        <input type="password" th:field="*{oldpassword}" />
+                                    </fieldset>
+                                    <fieldset>
+                                        <label for="password">New password</label>
                                         <p class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password error</p>
                                         <input type="password" th:field="*{password}" />
                                     </fieldset>
                                     <fieldset>
-                                        <label for="passwordagain">Password again</label>
+                                        <label for="passwordagain">New password again</label>
                                         <p class="error" th:if="${#fields.hasErrors('passwordagain')}" th:errors="*{passwordagain}">passwordagain error</p>
                                         <input type="password" th:field="*{passwordagain}" />
                                     </fieldset>
@@ -66,7 +72,7 @@
                                         <label for="description">Description</label>
                                         <textarea th:field="*{description}"></textarea>
                                     </fieldset>
-                                    <input type="submit" id="register" value="Register" />
+                                    <input type="submit" id="submit" value="Submit" />
                                 </fieldset>
                             </form>
                         </div>

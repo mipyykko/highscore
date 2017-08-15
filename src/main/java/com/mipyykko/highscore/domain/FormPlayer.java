@@ -24,7 +24,7 @@ import org.hibernate.validator.constraints.ScriptAssert;
  *
  * @author pyykkomi
  */
-public class RegisteringPlayer {
+public class FormPlayer {
 
     @NotBlank
     @Length(min = 4, max = 24, message = "Username must be 4 to 24 letters!")
@@ -35,10 +35,20 @@ public class RegisteringPlayer {
     @Length(min = 8, max = 24, message = "Password must be 8 to 24 letters!")
     private String password;
     private String passwordagain;
+    private String oldpassword;
     @Email
     private String email;
     private String description;
 
+    public FormPlayer() {}
+
+    public FormPlayer(String username, String name, String email, String description) {
+        this.username = username;
+        this.name = name;
+        this.email = email;
+        this.description = description;
+    }
+    
     public String getUsername() {
         return username;
     }
@@ -69,6 +79,14 @@ public class RegisteringPlayer {
 
     public void setPasswordagain(String passwordagain) {
         this.passwordagain = passwordagain;
+    }
+
+    public String getOldpassword() {
+        return oldpassword;
+    }
+
+    public void setOldpassword(String oldpassword) {
+        this.oldpassword = oldpassword;
     }
 
     public String getEmail() {

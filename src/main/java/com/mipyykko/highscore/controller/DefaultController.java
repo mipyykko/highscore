@@ -8,7 +8,7 @@ package com.mipyykko.highscore.controller;
 import com.mipyykko.highscore.auth.JpaAuthenticationProvider;
 import com.mipyykko.highscore.domain.Game;
 import com.mipyykko.highscore.domain.Player;
-import com.mipyykko.highscore.domain.RegisteringPlayer;
+import com.mipyykko.highscore.domain.FormPlayer;
 import com.mipyykko.highscore.domain.Score;
 //import com.mipyykko.highscore.domain.UserType;
 //import com.mipyykko.highscore.repository.UserTypeRepository;
@@ -50,10 +50,6 @@ public class DefaultController {
     private GameService gameService;
     @Autowired
     private ScoreService scoreService;
-    @Autowired
-    private JpaAuthenticationProvider jpaAuthenticationProvider;
-    @Autowired
-    private AuthenticationManager authenticationManager;
 //    @Autowired
 //    private UserTypeRepository userTypeRepository;
     
@@ -103,44 +99,5 @@ public class DefaultController {
         List<Player> players = playerService.getMostActivePlayers();
         model.addAttribute("players", players);
         return "index";
-    }
-    
-    @RequestMapping(value = "login", method = RequestMethod.GET)
-    public String login() {
-        return "login";
-    }
-    
-    @RequestMapping(value = "register", method = RequestMethod.GET)
-    public String showRegister(@ModelAttribute RegisteringPlayer registeringPlayer) {
-        if (playerService.getAuthenticatedPlayer() != null) {
-            return "redirect:/";
-        }
-        
-        return "register";
-    }
-    
-    @RequestMapping(value = "register", method = RequestMethod.POST)
-    public String handleRegister(@Validated @ModelAttribute RegisteringPlayer registeringPlayer, BindingResult bindingResult) {
-        if (!registeringPlayer.getPassword().isEmpty() &&
-            !registeringPlayer.getPassword().equals(registeringPlayer.getPasswordagain())) {
-            bindingResult.rejectValue("passwordagain", "error.player", "Must match password!");
-        }
-        if (bindingResult.hasErrors()) {
-            return "register";
-        }
-
-        Player player = new Player(registeringPlayer.getUsername(), registeringPlayer.getPassword(),
-                                   registeringPlayer.getName(), registeringPlayer.getEmail(),
-                                   registeringPlayer.getDescription());
-        player.getUserTypes().add(Player.UserType.USER);
-        playerService.save(player);
-        
-        Authentication user = new UsernamePasswordAuthenticationToken(player.getUsername(), player.getPassword());
-        SecurityContextHolder
-                .getContext()
-                .setAuthentication(
-                        jpaAuthenticationProvider
-                                .authenticate(user));
-        return "redirect:/";
-    }
+    }    
 }

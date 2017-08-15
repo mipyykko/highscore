@@ -53,6 +53,7 @@
                                     <p class="profile_field" th:text="${highscores}">0</p>
                                     <div class="clearfix"></div>
                                 </div>
+                                <a th:if="${ownprofile}" th:href="@{/profile/edit}">Edit...</a>
                             </div>
                         </div>
                     </div>
