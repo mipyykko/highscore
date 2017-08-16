@@ -45,6 +45,10 @@ public class GameService {
         return gameRepository.findAll(pageable);
     }
     
+    public Game find(Game game) {
+        return gameRepository.findByNameAndPublisherAndPublishedYear(game.getName(), game.getPublisher(), game.getPublishedYear());
+    }
+    
     @Transactional
     public Game save(Game game) {
         return gameRepository.save(game);

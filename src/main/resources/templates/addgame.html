@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HighScore</title>
+        <link th:href="@{/css/bootstrap.css}" rel='stylesheet' type='text/css' />
+        <!-- Custom Theme files -->
+        <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css" media="all" />
+        <!-- Custom Theme files -->
+        <script th:src="@{/js/jquery.min.js}"></script>
+        <!-- Custom Theme files -->
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="keywords" content="My Secret Spot Ui Kit Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android  Compatible web template, 
+              Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+        <!--webfont-->
+        <link href='//fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css' />
+        <!-- chart -->
+        <script th:src="@{/js/Chart.js}"></script>
+        <!-- //chart -->    
+        <!-- Calender -->
+        <link rel="stylesheet" th:href="@{/css/clndr.css}" type="text/css" />
+        <script th:src="@{/js/underscore-min.js}" type="text/javascript"></script>
+        <script th:src="@{/js/moment-2.2.1.js}" type="text/javascript"></script>
+        <script th:src="@{/js/clndr.js}" type="text/javascript"></script>
+        <script th:src="@{js/site.js}" type="text/javascript"></script>
+        <!-- End Calender -->
+    </head>
+    <body>
+        <div th:replace="fragments/header :: header(currentuser=${currentuser})"></div>
+        <!-- profile? -->
+        <div class="content">
+            <div class="container">
+                <div class="span_1_by_4">
+                    <div class="col-md-6 spansecound">
+                        <div class="span1">
+                            <h2>Add new game</h2>
+                            <form id="gameForm" th:action="@{/games/add}" th:object="${game}" method="POST">
+                                <fieldset id="body">
+                                    <fieldset>
+                                        <p class="error" th:if="${#fields.hasErrors('uniqueness')}" th:errors="*{uniqueness}">combo error</p>
+                                    </fieldset>
+                                    <fieldset>
+                                        <label for="name">Name</label>
+                                        <p class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">name error</p>
+                                        <input type="text" th:field="*{name}" />
+                                    </fieldset>
+                                    <fieldset>
+                                        <label for="publisher">Publisher</label>
+                                        <p class="error" th:if="${#fields.hasErrors('publisher')}" th:errors="*{publisher}">publisher error</p>
+                                        <input type="text" th:field="*{publisher}" />
+                                    </fieldset>
+                                    <fieldset>
+                                        <label for="publishedYear">Year published</label>
+                                        <p class="error" th:if="${#fields.hasErrors('publishedYear')}" th:errors="*{publishedYear}">published error</p>
+                                        <input type="text" th:field="*{publishedYear}" />
+                                    </fieldset>
+                                    <input type="submit" value="Submit" />
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

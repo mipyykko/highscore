@@ -5,6 +5,7 @@
  */
 package com.mipyykko.highscore.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -13,8 +14,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
@@ -23,17 +27,26 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
  * @author pyykkomi
  */
 @Entity
+@Table(uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"name", "publisher", "published_year"})
+})
 public class Game extends AbstractPersistable<Long> implements Comparable<Game> {
     
-    @NotBlank
-    @Column(unique = true)
+    @NotBlank(message = "Name cannot be empty!")
+    @Length(max = 128, message = "Name can be at most 128 characters")
+    @Column(name = "name")
     private String name;
+    @Column(name = "publisher")
     private String publisher;
+    @Column(name = "published_year")
     private String publishedYear;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "game", cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Score> scores = new ArrayList<>();
     private ScoreType scoreType;
+    
+    // for error
+    private String uniqueness;
     
     public Game() {
         this.scoreType = ScoreType.HIGHEST;
@@ -86,6 +99,14 @@ public class Game extends AbstractPersistable<Long> implements Comparable<Game> 
         this.scoreType = scoreType;
     }
 
+    public String getUniqueness() {
+        return uniqueness;
+    }
+
+    public void setUniqueness(String uniqueness) {
+        this.uniqueness = uniqueness;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 7;
@@ -115,8 +136,6 @@ public class Game extends AbstractPersistable<Long> implements Comparable<Game> 
     public int compareTo(Game o) {
         return this.hashCode() - o.hashCode();
     }
-
-
 
     public enum ScoreType {
         HIGHEST, LOWEST

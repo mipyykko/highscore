@@ -262,6 +262,7 @@ fieldset#body {
     font-size:0.8725em;
     font-weight: 400;
 }
+
 #loginForm #body fieldset label{
     display:block;
     float:none;
@@ -329,6 +330,75 @@ fieldset#body {
   box-shadow: none;
   padding: 0 16px;
 }
+
+#gameForm #body fieldset label{
+    display:block;
+    float:none;
+    margin:0 0 6px 0;
+    text-align: left;
+}
+
+#gameForm #body fieldset .error {
+    display: block;
+    float: none;
+    margin: 0 0 6px 0;
+    text-align: left;
+    font-size: 1em;
+    color: #FF0000;
+}
+
+#gameForm #body fieldset .message {
+    display: block;
+    float: none;
+    margin: 0 0 6px 0;
+    text-align: left;
+    font-size: 0.8em;
+} 
+
+#gameForm #login {
+    width: 100%;
+    background: #d2b75e;
+    color: #fff;
+    font-size: 0.875em;
+    padding: 8px 20px;
+    border: none;
+    margin: 0 12px 0 0;
+    cursor: pointer;
+    transition: all .5s;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -o-transition: all .5s;
+    outline: none;
+    text-transform: uppercase;  
+}
+#gameForm #login:hover{
+     background:#5f8b9e;	 
+}
+#gameForm input {
+   width: 100%;
+  border: 1px solid #DADADA;
+  color: #222;
+  background: #FFF;
+  padding: 6px;
+  font-size: 0.8125em;
+  -webkit-apperance: none;
+  outline: none
+}
+#body label i {
+  color: #000;
+  font-size: 1em;
+  font-style: normal;
+}
+#gameForm span a {
+  color:#34353a;
+  font-size: 0.85em;
+  font-weight: 400;
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0 16px;
+}
+
 /*-- //login-pop --*/
 .search {
     float: right;
