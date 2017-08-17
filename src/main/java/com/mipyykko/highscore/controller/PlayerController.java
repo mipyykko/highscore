@@ -82,9 +82,11 @@ public class PlayerController {
 
     @RequestMapping(value = {"/profile", "/profile/{id}"}, method = RequestMethod.GET)
     public String getProfile(Model model, @PathVariable Map<String, String> pathVariables) {
+        Player authenticatedPlayer = playerService.getAuthenticatedPlayer();
+        
         Player player = pathVariables.containsKey("id")
                       ? playerService.get(Long.parseLong(pathVariables.get("id")))
-                      : playerService.getAuthenticatedPlayer();
+                      : authenticatedPlayer;
         
         if (player == null) {
             return "redirect:/";
@@ -95,7 +97,9 @@ public class PlayerController {
         model.addAttribute("highscores", highScores.size());
         model.addAttribute("games", playerService.getGamesByPlayer(player.getId()));
         model.addAttribute("ownprofile", !pathVariables.containsKey("id") 
-                || pathVariables.containsKey("id") && Long.parseLong(pathVariables.get("id")) == player.getId());
+                || pathVariables.containsKey("id") 
+                    && authenticatedPlayer != null 
+                    && Long.parseLong(pathVariables.get("id")) == authenticatedPlayer.getId());
         return "player";
     }
     

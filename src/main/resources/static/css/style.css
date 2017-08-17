@@ -384,6 +384,61 @@ fieldset#body {
   -webkit-apperance: none;
   outline: none
 }
+
+#scoreForm #body fieldset label{
+    display:block;
+    float:none;
+    margin:0 0 6px 0;
+    text-align: left;
+}
+
+#scoreForm #body fieldset .error {
+    display: block;
+    float: none;
+    margin: 0 0 6px 0;
+    text-align: left;
+    font-size: 1em;
+    color: #FF0000;
+}
+
+#scoreForm #body fieldset .message {
+    display: block;
+    float: none;
+    margin: 0 0 6px 0;
+    text-align: left;
+    font-size: 0.8em;
+} 
+
+#scoreForm #login {
+    width: 100%;
+    background: #d2b75e;
+    color: #fff;
+    font-size: 0.875em;
+    padding: 8px 20px;
+    border: none;
+    margin: 0 12px 0 0;
+    cursor: pointer;
+    transition: all .5s;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -o-transition: all .5s;
+    outline: none;
+    text-transform: uppercase;  
+}
+#scoreForm #login:hover{
+     background:#5f8b9e;	 
+}
+#scoreForm input {
+   width: 100%;
+  border: 1px solid #DADADA;
+  color: #222;
+  background: #FFF;
+  padding: 6px;
+  font-size: 0.8125em;
+  -webkit-apperance: none;
+  outline: none
+}
+
 #body label i {
   color: #000;
   font-size: 1em;

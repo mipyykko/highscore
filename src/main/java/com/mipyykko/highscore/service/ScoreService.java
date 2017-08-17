@@ -52,6 +52,7 @@ public class ScoreService {
         return score;
     }
 
+    @Transactional
     public Score save(Score score) {
         return scoreRepository.save(score);
     }

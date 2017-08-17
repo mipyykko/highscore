@@ -7,10 +7,10 @@ package com.mipyykko.highscore.controller;
 
 import com.mipyykko.highscore.domain.Game;
 import com.mipyykko.highscore.domain.Player;
+import com.mipyykko.highscore.domain.Score;
 import com.mipyykko.highscore.service.GameService;
 import com.mipyykko.highscore.service.PlayerService;
 import java.util.Collections;
-import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -89,7 +89,7 @@ public class GameController {
     
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String handleAddGame(Model model, @Validated @ModelAttribute Game game, BindingResult bindingResult) {
-        if (gameService.find(game) != null) {
+        if (gameService.findSimilar(game) != null) {
                 bindingResult.rejectValue("uniqueness", "errors.game", "Game is not unique enough!");
         }
 

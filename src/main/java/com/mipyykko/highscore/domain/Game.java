@@ -5,7 +5,6 @@
  */
 package com.mipyykko.highscore.domain;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -21,6 +20,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.jpa.domain.AbstractPersistable;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -40,7 +40,7 @@ public class Game extends AbstractPersistable<Long> implements Comparable<Game> 
     private String publisher;
     @Column(name = "published_year")
     private String publishedYear;
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "game", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "game", cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Score> scores = new ArrayList<>();
     private ScoreType scoreType;

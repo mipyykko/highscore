@@ -7,14 +7,17 @@ package com.mipyykko.highscore.domain;
 
 import java.util.Comparator;
 import java.util.Date;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.jpa.domain.AbstractPersistable;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -23,13 +26,19 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 @Entity
 public class Score extends AbstractPersistable<Long> implements Comparable<Score> {
     
-    @ManyToOne 
+    @ManyToOne
     private Game game;
     @ManyToOne
     private Player player;
-    private String score;
-    @Temporal(TemporalType.DATE)
-    private Date date;
+    @NotNull
+    @NotEmpty(message = "Score can not be empty!")
+    private String scoreValue;
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date scoreDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date sentDate;
     // private Screenshot screenshot;
     private Status status;
     
@@ -37,12 +46,13 @@ public class Score extends AbstractPersistable<Long> implements Comparable<Score
         this.status = Status.PENDING;
     }
     
-    public Score(Game game, Player player, String score, Date date) {
+    public Score(Game game, Player player, String scoreValue, Date scoreDate) {
         this();
         this.game = game;
         this.player = player;
-        this.score = score;
-        this.date = date;
+        this.scoreValue = scoreValue;
+        this.scoreDate = scoreDate;
+        this.sentDate = new Date(System.currentTimeMillis());
     }
     
     public Game getGame() {
@@ -61,20 +71,20 @@ public class Score extends AbstractPersistable<Long> implements Comparable<Score
         this.player = player;
     }
 
-    public String getScore() {
-        return score;
+    public String getScoreValue() {
+        return scoreValue;
     }
 
-    public void setScore(String score) {
-        this.score = score;
+    public void setScoreValue(String scoreValue) {
+        this.scoreValue = scoreValue;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getScoreDate() {
+        return scoreDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setScoreDate(Date scoreDate) {
+        this.scoreDate = scoreDate;
     }
 
     public Status getStatus() {
@@ -85,6 +95,14 @@ public class Score extends AbstractPersistable<Long> implements Comparable<Score
         this.status = status;
     }
 
+    public Date getSentDate() {
+        return sentDate;
+    }
+
+    public void setSentDate(Date sentDate) {
+        this.sentDate = sentDate;
+    }
+    
     @Override
     public int compareTo(Score o) {
         return this.game.getScoreType() == Game.ScoreType.LOWEST
@@ -93,8 +111,8 @@ public class Score extends AbstractPersistable<Long> implements Comparable<Score
     }
     
     public static class Comparators {
-        public static Comparator<Score> HIGHEST = (Score o1, Score o2) -> o1.getScore().compareTo(o2.getScore());
-        public static Comparator<Score> LOWEST = (Score o1, Score o2) -> o2.getScore().compareTo(o1.getScore());
+        public static Comparator<Score> HIGHEST = (Score o1, Score o2) -> o1.getScoreValue().compareTo(o2.getScoreValue());
+        public static Comparator<Score> LOWEST = (Score o1, Score o2) -> o2.getScoreValue().compareTo(o1.getScoreValue());
     }
     
     public enum Status {

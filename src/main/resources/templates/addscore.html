@@ -34,17 +34,32 @@
                 <div class="span_1_by_4">
                     <div class="col-md-6 spansecound">
                         <div class="span1">
-                            <h3 th:text="${game.name}">name</h3>
-                            <h5 th:text="${game.publisher}">publisher</h5>
-                            <h6 th:text="${game.publishedYear}">year</h6>
-                            <div class="weather_by_days" th:each="score : ${game.scores}">
-                                <div class="weather_by_day">
-                                    <p class="w_day"><span th:text="${score.player.name}">name</span></p>
-                                    <p class="w_num"><span th:text="${score.scoreValue}">score</span></p>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                            <div sec:authorize="isAuthenticated()"><a th:href="@{/scores/add/{id}(id = ${game.id})}">Add score...</a></div>
+                            <h2>Add new score</h2>
+                            <form id="scoreForm" th:action="@{/scores/add}" th:object="${score}" method="POST">
+                                <fieldset id="body">
+                                    <fieldset>
+                                        <label>Game</label>
+                                        <p th:text="*{game.name}">game name</p>
+                                        <input type="hidden" th:field="*{game}" />
+                                    </fieldset>
+                                    <fieldset>
+                                        <label>Player</label>
+                                        <p th:text="*{player.username}">player username</p>
+                                        <input type="hidden" th:field="*{player}" />
+                                    </fieldset>
+                                    <fieldset>
+                                        <label for="scoreDate">Date</label>
+                                        <p class="error" th:if="${#fields.hasErrors('scoreDate')}" th:errors="*{scoreDate}">score error</p>
+                                        <input name="scoreDate" type="date" th:field="*{scoreDate}" />
+                                    </fieldset>
+                                    <fieldset>
+                                        <label for="scoreValue">Score</label>
+                                        <p class="error" th:if="${#fields.hasErrors('scoreValue')}" th:errors="*{scoreValue}">score error</p>
+                                        <input name="score" th:field="*{scoreValue}" />
+                                    </fieldset>
+                                    <input type="submit" value="Submit" />
+                                </fieldset>
+                            </form>
                         </div>
                     </div>
                 </div>
