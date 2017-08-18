@@ -148,4 +148,25 @@ public class GameServiceTest {
         savedGames.stream().forEach((g) -> gameService.delete(g));
         assertTrue(gameService.getTopGames().isEmpty());
     }
+    
+    @Test
+    public void testFindSimilar() {
+        Game game1 = new Game("test4", "Game Company", "1998");
+        game1 = gameService.save(game1);
+        
+        Game game2 = new Game("test4", "Game Company", "1998");
+        Game game3 = new Game("not equal", "Game Company", "1998");
+        Game game4 = new Game("test4", "not equal", "1998");
+        Game game5 = new Game("test4", "Game Company", "not equal");
+        
+        assertNotNull(gameService.findSimilar(game2));
+
+        assertEquals(gameService.findSimilar(game2).getName(), game1.getName());
+        
+        assertNull(gameService.findSimilar(game3));
+        assertNull(gameService.findSimilar(game4));
+        assertNull(gameService.findSimilar(game5));
+
+        gameRepository.delete(game1);
+    }
 }

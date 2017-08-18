@@ -158,6 +158,8 @@ public class PlayerServiceTest {
 
     @Test
     public void testGetGamesByPlayer() {
+        assertNull(playerService.getGamesByPlayer(6666666l));
+        
         addTestData();
         List<Game> games = playerService.getGamesByPlayer(player1.getId());
         assertEquals(2, games.size());
