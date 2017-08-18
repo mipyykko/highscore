@@ -43,7 +43,7 @@ public class GameServiceTest {
     public PlayerService playerService;
 
     @Autowired
-    private  GameRepository gameRepository;
+    private GameRepository gameRepository;
     @Autowired
     private PlayerRepository playerRepository;
     @Autowired

@@ -28,7 +28,9 @@ public class PlayerService {
 
     public Player getAuthenticatedPlayer() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return playerRepository.findByUsername(authentication.getName());
+        return authentication == null 
+             ? null
+             : playerRepository.findByUsername(authentication.getName());
     }    
     
     public Player get(Long id) {
