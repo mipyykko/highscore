@@ -11,6 +11,8 @@ import com.mipyykko.highscore.domain.Score;
 import com.mipyykko.highscore.service.GameService;
 import com.mipyykko.highscore.service.PlayerService;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -69,8 +71,13 @@ public class GameController {
             return "redirect:/games";
         }
         
-        Collections.sort(game.getScores());
+        List<Score> scores = game.getScores()
+                                .stream()
+                                .filter(score -> score.isAccepted())
+                                .collect(Collectors.toList());
+        Collections.sort(scores);
         model.addAttribute("game", game);
+        model.addAttribute("scores", scores);
         return "game";
     }
     

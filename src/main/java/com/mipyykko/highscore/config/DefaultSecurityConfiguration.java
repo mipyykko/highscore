@@ -36,14 +36,20 @@ public class DefaultSecurityConfiguration extends WebSecurityConfigurerAdapter {
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
+        // sallitaan framejen käyttö
+        http.headers().frameOptions().sameOrigin();
+
         http.authorizeRequests()
-                .anyRequest().permitAll()
-                .antMatchers("/login", "/signup", "/register", "/static*/**").permitAll()
+                .anyRequest().authenticated()
+                .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/scores/pending*/**").hasAuthority("ADMIN")
+                .antMatchers("/", "/login", "/logout", "/register", "/static/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/", "/games*/**").permitAll();
         http.formLogin()
                 .loginProcessingUrl("/authenticate")
                 .defaultSuccessUrl("/")
-                .failureForwardUrl("/?error")
+                .failureForwardUrl("/") // ?error
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .permitAll();

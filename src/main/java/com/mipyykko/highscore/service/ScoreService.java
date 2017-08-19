@@ -71,7 +71,8 @@ public class ScoreService {
                 return game;
             }).filter((game) -> 
                       (game.getScores() != null 
-                    && game.getScores().get(0).getPlayer() == player))
+                    && game.getScores().get(0).getPlayer() == player
+                    && game.getScores().get(0).isAccepted()))
               .forEach((game) -> {
                 topScores.add(game.getScores().get(0));
             });
@@ -82,8 +83,16 @@ public class ScoreService {
     public List<Score> getPending() {
         return scoreRepository.findByStatus(Score.Status.PENDING);
     }
+
+    public List<Score> getAccepted() {
+        return scoreRepository.findByStatus(Score.Status.ACCEPTED);
+    }
     
     public List<Score> findByGame(Game game) {
         return scoreRepository.findByGame(game);
+    }
+    
+    public Score get(Long id) {
+        return scoreRepository.findOne(id);
     }
 }

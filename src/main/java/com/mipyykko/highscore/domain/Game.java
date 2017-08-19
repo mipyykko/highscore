@@ -14,13 +14,13 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.jpa.domain.AbstractPersistable;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -46,6 +46,7 @@ public class Game extends AbstractPersistable<Long> implements Comparable<Game> 
     private ScoreType scoreType;
     
     // for error
+    @Transient
     private String uniqueness;
     
     public Game() {

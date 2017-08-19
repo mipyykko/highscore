@@ -10,8 +10,8 @@
                     <h4 th:text="${score.scoreValue}">score</h4>
                     <p class="w_day"><span th:text="${score.scoreDate}">score date</span></p>
                     <p class="w_num"><a th:href="@{/profile/{id}(id = ${score.player.id})}"><span th:text="${score.player.username}">player username</span></a></p>
-                    <button type="submit" name="accept">Accept</button>
-                    <button type="submit" name="reject">Reject</button>
+                    <input type="submit" name="acceptScore" value="Accept" />
+                    <input type="submit" name="rejectScore" value="Reject" />
                 </form>
             </div>
         </div>

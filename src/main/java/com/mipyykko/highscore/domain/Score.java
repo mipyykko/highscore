@@ -8,9 +8,8 @@ package com.mipyykko.highscore.domain;
 import java.util.Comparator;
 import java.util.Date;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -40,6 +39,7 @@ public class Score extends AbstractPersistable<Long> implements Comparable<Score
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date sentDate;
     // private Screenshot screenshot;
+    @Enumerated(EnumType.STRING)
     private Status status;
     
     public Score() {
@@ -101,6 +101,10 @@ public class Score extends AbstractPersistable<Long> implements Comparable<Score
 
     public void setSentDate(Date sentDate) {
         this.sentDate = sentDate;
+    }
+    
+    public boolean isAccepted() {
+        return this.status == Status.ACCEPTED;
     }
     
     @Override

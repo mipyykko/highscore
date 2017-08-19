@@ -5,10 +5,8 @@
  */
 package com.mipyykko.highscore.controller;
 
-import com.mipyykko.highscore.auth.JpaAuthenticationProvider;
 import com.mipyykko.highscore.domain.Game;
 import com.mipyykko.highscore.domain.Player;
-import com.mipyykko.highscore.domain.FormPlayer;
 import com.mipyykko.highscore.domain.Score;
 //import com.mipyykko.highscore.domain.UserType;
 //import com.mipyykko.highscore.repository.UserTypeRepository;
@@ -17,24 +15,16 @@ import com.mipyykko.highscore.service.PlayerService;
 import com.mipyykko.highscore.service.ScoreService;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import static sun.audio.AudioPlayer.player;
 
 /**
  *
@@ -99,10 +89,21 @@ public class DefaultController {
     public String index(Model model) {
         Player currentuser = playerService.getAuthenticatedPlayer();
         model.addAttribute("currentuser", currentuser);
+
         List<Game> games = gameService.getTopGames();
         model.addAttribute("games", games);
+        
         List<Player> players = playerService.getMostActivePlayers();
-        model.addAttribute("players", players);
+        Map<Player, Long> activePlayers = new HashMap<>();
+        players.stream().forEach((p) -> {
+            activePlayers.put(p,
+                    p.getScores()
+                            .stream()
+                            .filter(score -> score.isAccepted())
+                            .count());
+        });
+        model.addAttribute("activePlayers", activePlayers);
+        
         if (currentuser != null && currentuser.isUserType(Player.UserType.ADMIN)) { 
             List<Score> pendingScores = scoreService.getPending();
             model.addAttribute("pendingScores", pendingScores);

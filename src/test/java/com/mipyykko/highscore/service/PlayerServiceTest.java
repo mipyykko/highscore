@@ -61,7 +61,7 @@ public class PlayerServiceTest {
     
     Player player1, player2;
     Game game1, game2;
-    Score score1, score2, score3, score4;
+    Score score1, score2, score3, score4, score5;
     
     public PlayerServiceTest() {
     }
@@ -91,10 +91,18 @@ public class PlayerServiceTest {
         score2 = new Score(game2, player1, "666", null);
         score3 = new Score(game1, player2, "777", null);
         score4 = new Score(game1, player1, "222", null);
+        score5 = new Score(game2, player2, "5555", null);
+
+        score1.setStatus(Score.Status.ACCEPTED);
+        score2.setStatus(Score.Status.ACCEPTED);
+        score3.setStatus(Score.Status.ACCEPTED);
+        score4.setStatus(Score.Status.ACCEPTED);
+        
         score1 = scoreService.save(score1);
         score2 = scoreService.save(score2);
         score3 = scoreService.save(score3);
         score4 = scoreService.save(score4);
+        score5 = scoreService.save(score5);
     }
     
     private void flushTestData() {

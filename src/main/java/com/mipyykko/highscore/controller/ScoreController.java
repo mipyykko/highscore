@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -95,13 +96,27 @@ public class ScoreController {
         return "pendingscores";
     }
     
-    @RequestMapping(value = "/pending/{id}", params = "accept", method = RequestMethod.POST)
-    public String handleAcceptPending(Model model, @PathVariable Long id) {
+    @RequestMapping(value = "/pending/{id}", method = RequestMethod.POST)
+    public String handlePending(Model model, 
+            @RequestParam(required = false, value = "acceptScore") String acceptScore, 
+            @RequestParam(required = false, value = "rejectScore") String rejectScore, 
+            @PathVariable Long id) {
+        Score score = scoreService.get(id);
+
+        if (score != null) {
+            score.setStatus(acceptScore != null 
+                          ? Score.Status.ACCEPTED
+                          : Score.Status.REJECTED);
+            scoreService.save(score);
+            return "redirect:/scores/pending";
+        }
+        
         return "redirect:/";
     }
 
-    @RequestMapping(value = "/pending/{id}", params = "reject", method = RequestMethod.POST)
-    public String handleRejectPending(Model model, @PathVariable Long id) {
-        return "redirect:/";
-    }
+//    @RequestMapping(value = "/pending/{id}", params = "reject", method = RequestMethod.POST)
+//    public String handleRejectPending(Model model, @PathVariable Long id) {
+//        Score score = scoreSer
+//        return "redirect:/";
+//    }
 }

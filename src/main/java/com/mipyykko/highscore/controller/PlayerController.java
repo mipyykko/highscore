@@ -44,7 +44,7 @@ public class PlayerController {
     @Autowired
     private JpaAuthenticationProvider jpaAuthenticationProvider;
 
-        @RequestMapping(value = "login", method = RequestMethod.GET)
+    @RequestMapping(value = "login", method = RequestMethod.GET)
     public String login() {
         return "login";
     }

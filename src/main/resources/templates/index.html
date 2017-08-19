@@ -136,9 +136,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                     <div class="col-md-6 spanthird">
                         <div class="span1">
                             <h3 class="tlt">Most active players</h3>
-                            <div class="weather_by_days" th:each="player : ${players}">
-                                <p class="w-day"><span th:text="${player.name}">game</span></p>
-                                <p class="w-num"><span th:text="${player.scores.size()}">0</span></p>
+                            <div class="weather_by_days" th:each="player : ${activePlayers}">
+                                <p class="w-day"><span th:text="${player.key.name}">game</span></p>
+                                <p class="w-num"><span th:text="${player.value}">0</span></p>
                                 <div class="clearfix"></div>
                             </div>
                         </div>
