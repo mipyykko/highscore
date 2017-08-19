@@ -35,6 +35,11 @@ public class PlayerService {
              : playerRepository.findByUsername(authentication.getName());
     }    
     
+    public boolean isAdmin() {
+        Player player = getAuthenticatedPlayer();
+        return player == null ? false : player.isUserType(Player.UserType.ADMIN);
+    }
+    
     public Player get(Long id) {
         return playerRepository.findOne(id);
     }

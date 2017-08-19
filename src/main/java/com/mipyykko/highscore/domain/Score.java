@@ -106,6 +106,10 @@ public class Score extends AbstractPersistable<Long> implements Comparable<Score
     public boolean isAccepted() {
         return this.status == Status.ACCEPTED;
     }
+
+    public boolean isRejected() {
+        return this.status == Status.REJECTED;
+    }
     
     @Override
     public int compareTo(Score o) {

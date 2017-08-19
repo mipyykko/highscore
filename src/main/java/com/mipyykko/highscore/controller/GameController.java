@@ -66,6 +66,7 @@ public class GameController {
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public String getGame(Model model, @PathVariable Long id) {
         Game game = gameService.get(id);
+        Player player = playerService.getAuthenticatedPlayer();
         
         if (game == null) {
             return "redirect:/games";
@@ -73,7 +74,8 @@ public class GameController {
         
         List<Score> scores = game.getScores()
                                 .stream()
-                                .filter(score -> score.isAccepted())
+                                .filter(score -> score.isAccepted() || 
+                                        (player != null && score.getPlayer() == player))
                                 .collect(Collectors.toList());
         Collections.sort(scores);
         model.addAttribute("game", game);

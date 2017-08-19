@@ -39,8 +39,9 @@
                             <h6 th:text="${game.publishedYear}">year</h6>
                             <div class="weather_by_days" th:each="score : ${scores}">
                                 <div class="weather_by_day">
-                                    <p class="w_day"><span th:text="${score.player.name}">name</span></p>
-                                    <p class="w_num"><span th:text="${score.scoreValue}">score</span></p>
+                                    <p class="w_day" th:style="not ${score.isAccepted()} ? 'font-style: italic' : ''"><span th:text="${score.player.name}">name</span></p>
+                                    <p class="w_num" th:style="not ${score.isAccepted()} ? 'font-style: italic' : ''"><span th:text="${score.scoreValue}">score</span></p>
+                                    <div th:if="not ${score.isAccepted()}">score pending</div>
                                     <div class="clearfix"></div>
                                 </div>
                             </div>

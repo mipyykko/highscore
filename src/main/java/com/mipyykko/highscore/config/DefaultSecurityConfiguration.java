@@ -6,13 +6,13 @@
 package com.mipyykko.highscore.config;
 
 import com.mipyykko.highscore.auth.JpaAuthenticationProvider;
-import com.mipyykko.highscore.domain.Player;
 //import com.mipyykko.highscore.domain.UserType;
 import com.mipyykko.highscore.repository.PlayerRepository;
 //import com.mipyykko.highscore.repository.UserTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
@@ -26,6 +26,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  */
 @Profile("default")
 @Configuration
+@PropertySource("application.properties")
 @EnableWebSecurity
 public class DefaultSecurityConfiguration extends WebSecurityConfigurerAdapter {
     
@@ -41,12 +42,13 @@ public class DefaultSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().sameOrigin();
 
         http.authorizeRequests()
-                .anyRequest().authenticated()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/scores/pending*/**").hasAuthority("ADMIN")
-                .antMatchers("/", "/login", "/logout", "/register", "/static/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/", "/games*/**").permitAll();
+                .antMatchers("/", "/login", "/logout", "/register", "/static*/**", "/css/**", "/js/**", "/images/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/", "/players*/**" ,"/games*/**").permitAll()
+                .anyRequest().authenticated();
         http.formLogin()
+                .loginPage("/")
                 .loginProcessingUrl("/authenticate")
                 .defaultSuccessUrl("/")
                 .failureForwardUrl("/") // ?error
