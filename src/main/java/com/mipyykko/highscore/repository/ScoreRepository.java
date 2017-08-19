@@ -17,4 +17,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ScoreRepository extends JpaRepository<Score, Long> {
     Long deleteByGame(Game game);
     List<Score> findByGame(Game game);
+    List<Score> findByStatus(Score.Status status);
 }

@@ -79,6 +79,10 @@ public class ScoreService {
         return topScores;
     }
     
+    public List<Score> getPending() {
+        return scoreRepository.findByStatus(Score.Status.PENDING);
+    }
+    
     public List<Score> findByGame(Game game) {
         return scoreRepository.findByGame(game);
     }

@@ -123,6 +123,10 @@ public class Player extends AbstractPersistable<Long> {
         this.userTypes = userTypes;
     }
     
+    public boolean isUserType(UserType userType) {
+        return userTypes.contains(userType);
+    }
+    
     public enum UserType {
         USER, ADMIN
     }

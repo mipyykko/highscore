@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+    </head>
+    <body>
+        <div th:fragment="pendingscore">
+            <div class="weather_by_day">
+                <form th:id="'pendingScoreForm' + ${score.id}" th:action="@{/scores/pending/{id}(id = ${score.id})}" method="POST">
+                    <h3><a th:href="@{/games/{id}(id = ${score.game.id})}" th:text="${score.game.name}">game name</a></h3>
+                    <h4 th:text="${score.scoreValue}">score</h4>
+                    <p class="w_day"><span th:text="${score.scoreDate}">score date</span></p>
+                    <p class="w_num"><a th:href="@{/profile/{id}(id = ${score.player.id})}"><span th:text="${score.player.username}">player username</span></a></p>
+                    <button type="submit" name="accept">Accept</button>
+                    <button type="submit" name="reject">Reject</button>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

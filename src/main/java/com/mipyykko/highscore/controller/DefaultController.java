@@ -80,14 +80,19 @@ public class DefaultController {
         gameService.save(game2);
         
         Score score1 = new Score(game1, test1, "12320", new Date(System.currentTimeMillis()));
+        score1.setStatus(Score.Status.ACCEPTED);
         Score score2 = new Score(game1, test2, "11000", new Date(System.currentTimeMillis() - 1000));
+        score2.setStatus(Score.Status.ACCEPTED);
         Score score3 = new Score(game2, test2, "100000", new Date(System.currentTimeMillis() - 22222));
+        score3.setStatus(Score.Status.ACCEPTED);
         Score score4 = new Score(game2, test1, "90000", new Date(System.currentTimeMillis() - 3333));
+        Score score5 = new Score(game2, test2, "999999999", new Date(System.currentTimeMillis() + 555));
 
         scoreService.addScore(score1);
         scoreService.addScore(score2);
         scoreService.addScore(score3);
         scoreService.addScore(score4);
+        scoreService.addScore(score5);
     }
     
     @RequestMapping(value = "/")
@@ -98,6 +103,10 @@ public class DefaultController {
         model.addAttribute("games", games);
         List<Player> players = playerService.getMostActivePlayers();
         model.addAttribute("players", players);
+        if (currentuser != null && currentuser.isUserType(Player.UserType.ADMIN)) { 
+            List<Score> pendingScores = scoreService.getPending();
+            model.addAttribute("pendingScores", pendingScores);
+        }
         return "index";
     }    
 }

@@ -12,6 +12,7 @@ import com.mipyykko.highscore.service.GameService;
 import com.mipyykko.highscore.service.PlayerService;
 import com.mipyykko.highscore.service.ScoreService;
 import java.util.Date;
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -77,5 +78,30 @@ public class ScoreController {
         scoreService.save(score);
         
         return "redirect:/games/" + score.getGame().getId();
+    }
+    
+    @RequestMapping(value = "/pending", method = RequestMethod.GET)
+    public String getPending(Model model) {
+        Player player = playerService.getAuthenticatedPlayer();
+        
+        if (player == null || 
+           (player != null && !player.isUserType(Player.UserType.ADMIN))) {
+            return "redirect:/";
+        }
+        
+        List<Score> pendingScores = scoreService.getPending();
+        model.addAttribute("pendingScores", pendingScores);
+
+        return "pendingscores";
+    }
+    
+    @RequestMapping(value = "/pending/{id}", params = "accept", method = RequestMethod.POST)
+    public String handleAcceptPending(Model model, @PathVariable Long id) {
+        return "redirect:/";
+    }
+
+    @RequestMapping(value = "/pending/{id}", params = "reject", method = RequestMethod.POST)
+    public String handleRejectPending(Model model, @PathVariable Long id) {
+        return "redirect:/";
     }
 }
