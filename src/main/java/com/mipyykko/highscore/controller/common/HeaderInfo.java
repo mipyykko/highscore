@@ -28,7 +28,7 @@ public class HeaderInfo {
     private ScoreService scoreService;
     
     public Map<String, Object> getHeaderAttributes() {
-        Map<String, Object> attributes = new HashMap<String, Object>();
+        Map<String, Object> attributes = new HashMap<>();
         Player currentuser = playerService.getAuthenticatedPlayer();
         attributes.put("currentuser", currentuser);
         if (currentuser != null && currentuser.isUserType(Player.UserType.ADMIN)) { 

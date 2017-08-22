@@ -38,14 +38,14 @@
                             <h5 th:text="${game.publisher}">publisher</h5>
                             <h6 th:text="${game.publishedYear}">year</h6>
                             <div class="weather_by_days" th:each="score : ${scores}">
-                                <div th:if="${score.isAccepted()}" class="weather_by_day">
+                                <div th:if="${score.isAccepted()} or ${currentuser.isAdmin()} or ${currentuser.id == score.player.id}" class="weather_by_day">
                                     <p class="w-day" th:style="not ${score.isAccepted()} ? 'font-style: italic' : ''">
                                         <a th:href="@{/profile/{id}(id = ${score.player.id})}" th:text="${score.player.name}">name</a>
+                                        <span th:if="not ${score.isAccepted()}">&nbsp;pending</span>
                                     </p>
                                     <p class="w-num" th:style="not ${score.isAccepted()} ? 'font-style: italic' : ''">
                                         <a th:href="@{/scores/{id}(id = ${score.id})}" th:text="${score.scoreValue}">score</a>
                                     </p>
-                                    <div th:if="not ${score.isAccepted()}">score pending</div>
                                     <div class="clearfix"></div>
                                 </div>
                             </div>
