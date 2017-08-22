@@ -4,16 +4,18 @@
     </head>
     <body>
         <div th:fragment="pendingscore">
-            <div class="weather_by_day">
-                <form th:id="'pendingScoreForm' + ${score.id}" th:action="@{/scores/pending/{id}(id = ${score.id})}" method="POST">
-                    <h3><a th:href="@{/games/{id}(id = ${score.game.id})}" th:text="${score.game.name}">game name</a></h3>
-                    <h4 th:text="${score.scoreValue}">score</h4>
-                    <p class="w_day"><span th:text="${score.scoreDate}">score date</span></p>
-                    <p class="w_num"><a th:href="@{/profile/{id}(id = ${score.player.id})}"><span th:text="${score.player.username}">player username</span></a></p>
-                    <input type="submit" name="acceptScore" value="Accept" />
-                    <input type="submit" name="rejectScore" value="Reject" />
-                </form>
-            </div>
+            <form th:id="'pendingScoreForm' + ${score.id}" th:action="@{/scores/pending/{id}(id = ${score.id})}" method="POST">
+                <div class="weather_by_day">
+                        <h3><a th:href="@{/games/{id}(id = ${score.game.id})}" th:text="${score.game.name}">game name</a></h3>
+                        <h4 th:text="${score.scoreValue}">score</h4>
+                        <p class="w-day"><span th:text="${score.scoreDate}">score date</span></p>
+                        <p class="w-num"><a th:href="@{/profile/{id}(id = ${score.player.id})}"><span th:text="${score.player.username}">player username</span></a></p>
+                        <div class="clearfix"></div>
+                </div>
+                <input class="btn btn-success" type="submit" name="acceptScore" value="Accept" />
+                <input class="btn btn-danger" type="submit" name="rejectScore" value="Reject" />
+                <input type="hidden" name="redirect" value="pending" />
+            </form>
         </div>
     </body>
 </html>

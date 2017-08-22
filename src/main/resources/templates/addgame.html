@@ -44,18 +44,22 @@
                                         <label for="name">Name</label>
                                         <p class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">name error</p>
                                         <input type="text" th:field="*{name}" />
+                                        <div class="clearfix"></div>
                                     </fieldset>
                                     <fieldset>
                                         <label for="publisher">Publisher</label>
                                         <p class="error" th:if="${#fields.hasErrors('publisher')}" th:errors="*{publisher}">publisher error</p>
                                         <input type="text" th:field="*{publisher}" />
+                                        <div class="clearfix"></div>
                                     </fieldset>
                                     <fieldset>
                                         <label for="publishedYear">Year published</label>
                                         <p class="error" th:if="${#fields.hasErrors('publishedYear')}" th:errors="*{publishedYear}">published error</p>
                                         <input type="text" th:field="*{publishedYear}" />
+                                        <div class="clearfix"></div>
                                     </fieldset>
-                                    <input type="submit" value="Submit" />
+                                    <br />
+                                    <input class="btn btn-success" type="submit" value="Submit" />
                                 </fieldset>
                             </form>
                         </div>

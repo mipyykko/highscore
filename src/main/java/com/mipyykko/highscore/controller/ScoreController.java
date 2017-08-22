@@ -5,6 +5,7 @@
  */
 package com.mipyykko.highscore.controller;
 
+import com.mipyykko.highscore.controller.common.HeaderInfo;
 import com.mipyykko.highscore.domain.Game;
 import com.mipyykko.highscore.domain.Player;
 import com.mipyykko.highscore.domain.Score;
@@ -38,6 +39,24 @@ public class ScoreController {
     private PlayerService playerService;
     @Autowired
     private ScoreService scoreService; 
+    @Autowired
+    private HeaderInfo headerInfo;
+    
+    @ModelAttribute
+    public void addHeaderAttributes(Model model) {
+        model.addAllAttributes(headerInfo.getHeaderAttributes());
+    }
+    
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    public String showScore(Model model, @PathVariable Long id) {
+        Score score = scoreService.get(id);
+        if (score == null) {
+            return "redirect:/";
+        }
+        
+        model.addAttribute("score", score);
+        return "score";
+    }
     
     @RequestMapping(value = "/add/{id}", method = RequestMethod.GET)
     public String showAddScore(Model model, @PathVariable Long id, @ModelAttribute Score score) {
@@ -100,6 +119,7 @@ public class ScoreController {
     public String handlePending(Model model, 
             @RequestParam(required = false, value = "acceptScore") String acceptScore, 
             @RequestParam(required = false, value = "rejectScore") String rejectScore, 
+            @RequestParam(required = false, value = "redirect") String redirect,
             @PathVariable Long id) {
         Score score = scoreService.get(id);
 
@@ -108,7 +128,15 @@ public class ScoreController {
                           ? Score.Status.ACCEPTED
                           : Score.Status.REJECTED);
             scoreService.save(score);
-            return "redirect:/scores/pending";
+            
+            switch (redirect) {
+                case "pending":
+                    return "redirect:/scores/pending";
+                case "score":
+                    return "redirect:/scores/" + id;
+                default:
+                    return "redirect:/";
+            }
         }
         
         return "redirect:/";

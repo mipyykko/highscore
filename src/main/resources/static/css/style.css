@@ -8,7 +8,7 @@ body{
 	padding:0;
 	font-family: 'Play', sans-serif;
 	background:#4e6772;
-	margin: 8em 0;
+	margin: 0em 0;
 }
 body a{
     transition:0.5s all;
@@ -40,8 +40,8 @@ label{
 /*-----start-header----*/
 .header-head{
 	background-color:#383331;
-	padding:1.5em 0;
-	margin-top:4em;
+	padding: 1em 0;
+	margin-top: 1em;
 }
 .header-head h1 {
     color: #d2b75e;
@@ -63,7 +63,7 @@ label{
     color: #9d9d9d;
     text-transform: uppercase;
 	padding:0;
-	font-size: 1.2em;
+	font-size: 1em;
 }
 .navbar-nav {
     margin: 0;
@@ -84,8 +84,8 @@ label{
     position: relative;
     min-height: 0px;
     margin-bottom: 0px;
-	float: left;
-	width: 55%;
+    float: left;
+    width: 75%;
 }
 .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
     color: #555;
@@ -159,8 +159,8 @@ ul.multi-column-dropdown h6 {
 	padding: 0;
 }
 .nav-right{
-	float:left;
-	width: 42%;
+	float: right;
+	width: 20%;
 }
 /*-- login-pop --*/
 .login-pop {
@@ -191,7 +191,7 @@ i.arrow {
 #loginpop a span{
     display: block;
     color: #9d9d9d;
-    font-size: 1.2em;
+    font-size: 1em;
     transition: 0.5s all;
     -webkit-transition: 0.5s all;
     -moz-transition: 0.5s all;
@@ -218,7 +218,7 @@ i.arrow {
     z-index:29;
 }
 #loginForm:after {
-	content: '';
+/*	content: '';*/
     position: absolute;
     right: 17px;
     top: -10px;
@@ -282,9 +282,9 @@ fieldset#body {
 #loginForm #body fieldset .message {
     display: block;
     float: none;
-    margin: 0 0 6px 0;
+    margin: 0 0 0px 0;
     text-align: left;
-    font-size: 0.8em;
+    font-size: 0.7em;
 } 
 
 #loginForm #login {

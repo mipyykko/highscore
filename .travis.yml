@@ -3,22 +3,26 @@ jdk:
 - oraclejdk8
 dist: trusty
 sudo: false
-
 before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start &
-  - sleep 3
-  
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start &
+- sleep 3
 addons:
   apt:
     sources:
-      - ubuntu-toolchain-r-test
+    - ubuntu-toolchain-r-test
     packages:
-      - libstdc++-4.9-dev
-      - google-chrome-stable
-      
+    - libstdc++-4.9-dev
+    - google-chrome-stable
 install: true
 script:
-- mvn test 
+- mvn test
 after_success:
 - mvn clean test jacoco:report coveralls:report
+deploy:
+  provider: heroku
+  api_key:
+    secure: ORIGw0G5YRdG+mxljlkUbgXpy1v0jm7eoe51LTf+fNBfP6f1zJe2rD9WY2OqcH6oomT6lkNGQpDjAfwuaVybwtTWSxvodMhR30yjqPfJTkc1AKaawdNphxGD+SmYdkl7ZAydAHWWGGKwV52XMRkg5t8KxSE2nZMCqdk61nGwJ3Qw8fO8AH+ojMYs0qBHy1SmBGrA7D8m+WwRKCqB1ynLyZCGsjoCncENUPWViJhBXUAV1jHECY7dfhWFAlgQvozl9cij6C6/yOXZyRQiLgCVPUhIC7QRJ5Ef5G4KEMkx8Ip8lnJbNmfL/NU2j/BAG6TwVbNaVeBnszFvQzb3H6R0QB+08YT5EfTvhtCNqnUHzvV5T43ASvtY87mWLMInl85ImvOVXoDwRCUZ01VplBaenzOwa+0Cwyqz4ZJEN4mN4rNylumoeteFO4x1SMjieJsCcg4ZYUkGQ47r6rceM+fUeD2pXiXHzfeRN5XyJ/jyyFlxq/96musARb5JHW5bJsW/07IHUi51wfbb0gOAGt/k5DcumEVmF9LUMUQW4E9d7YQ6MG2cVex0y1QBAvhvxHA1rnY9zSY/wjLPem/Z/glEbfcVX947yUsPAt925Yy4/EnmW1cBLFg2U5yG6Kb3A5m55dpsd3CiEi/A1mEYaYQTL0O0DCmZn7WfFfRkMjpPPhU=
+  app: boiling-basin-60437
+  on:
+    repo: mipyykko/highscore

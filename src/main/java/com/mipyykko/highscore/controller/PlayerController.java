@@ -6,6 +6,7 @@
 package com.mipyykko.highscore.controller;
 
 import com.mipyykko.highscore.auth.JpaAuthenticationProvider;
+import com.mipyykko.highscore.controller.common.HeaderInfo;
 import com.mipyykko.highscore.domain.Player;
 import com.mipyykko.highscore.domain.FormPlayer;
 import com.mipyykko.highscore.domain.Score;
@@ -43,7 +44,14 @@ public class PlayerController {
     private ScoreService scoreService;
     @Autowired
     private JpaAuthenticationProvider jpaAuthenticationProvider;
-
+    @Autowired
+    private HeaderInfo headerInfo;
+    
+    @ModelAttribute
+    public void addHeaderAttributes(Model model) {
+        model.addAllAttributes(headerInfo.getHeaderAttributes());
+    }
+    
     @RequestMapping(value = "login", method = RequestMethod.GET)
     public String login() {
         return "login";

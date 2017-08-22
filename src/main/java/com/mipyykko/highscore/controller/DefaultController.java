@@ -5,6 +5,7 @@
  */
 package com.mipyykko.highscore.controller;
 
+import com.mipyykko.highscore.controller.common.HeaderInfo;
 import com.mipyykko.highscore.domain.Game;
 import com.mipyykko.highscore.domain.Player;
 import com.mipyykko.highscore.domain.Score;
@@ -18,12 +19,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -42,6 +43,8 @@ public class DefaultController {
     private ScoreService scoreService;
 //    @Autowired
 //    private UserTypeRepository userTypeRepository;
+    @Autowired
+    private HeaderInfo headerInfo;
     
     @PostConstruct
     @Profile("default")
@@ -85,11 +88,13 @@ public class DefaultController {
         scoreService.addScore(score5);
     }
     
+    @ModelAttribute
+    public void addHeaderAttributes(Model model) {
+        model.addAllAttributes(headerInfo.getHeaderAttributes());
+    }
+    
     @RequestMapping(value = "/")
     public String index(Model model) {
-        Player currentuser = playerService.getAuthenticatedPlayer();
-        model.addAttribute("currentuser", currentuser);
-
         List<Game> games = gameService.getTopGames();
         model.addAttribute("games", games);
         
@@ -104,10 +109,6 @@ public class DefaultController {
         });
         model.addAttribute("activePlayers", activePlayers);
         
-        if (currentuser != null && currentuser.isUserType(Player.UserType.ADMIN)) { 
-            List<Score> pendingScores = scoreService.getPending();
-            model.addAttribute("pendingScores", pendingScores);
-        }
         return "index";
     }    
 }

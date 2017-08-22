@@ -50,7 +50,7 @@ public class JpaAuthenticationProvider implements AuthenticationProvider {
         List<SimpleGrantedAuthority> grantedAuths = 
                 player.getUserTypes().stream().map(type -> new SimpleGrantedAuthority(type.toString())).collect(Collectors.toList());
         //grantedAuths.add(new SimpleGrantedAuthority("USER"));
-
+ 
         return new UsernamePasswordAuthenticationToken(player.getUsername(), password, grantedAuths);
     }
 

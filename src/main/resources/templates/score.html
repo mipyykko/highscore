@@ -28,45 +28,49 @@
     </head>
     <body>
         <div th:replace="fragments/header :: header(currentuser=${currentuser})"></div>
+        <!-- profile? -->
         <div class="content">
             <div class="container">
                 <div class="span_1_by_4">
-                    <div class="col-md-6 spanfirst">
-                        <div class="span1">
-                            <h3 th:text="${player.username}">username</h3>
-                            <div class="profile_info">
-                                <div class="profile_info_entry"> 
-                                    <p class="profile_label">Name</p>
-                                    <div class="clearfix"></div>
-                                    <p class="profile_field" th:text="${player.name}">name</p>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="profile_info_entry">
-                                    <p class="profile_label">Description</p>
-                                    <div class="clearfix"></div>
-                                    <p class="profile_field" th:text="${player.description}">description</p>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="profile_info_entry">
-                                    <p class="profile_label">High scores</p>
-                                    <div class="clearfix"></div>
-                                    <p class="profile_field" th:text="${highscores}">0</p>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <a th:if="${ownprofile}" th:href="@{/profile/edit}">Edit...</a>
-                            </div>
-                        </div>
-                    </div>
                     <div class="col-md-6 spansecound">
                         <div class="span1">
-                            <h3>Games</h3>
-                            <div class="weather-by-days" th:each="game : ${games}">
-                                <div class="weather-by-day">
-                                    <p class="w-day"><a th:href="@{/games/{id}(id = ${game.id})}"><span th:text="${game.name}">game</span></a></p>
+                            <h3><a th:href="@{/games/{id}(id = score.game.id)}" th:text="${score.game.name}">game</a></h3>
+                            <h5 th:text="${score.game.publisher}">publisher</h5>
+                            <h6 th:text="${score.game.publishedYear}">year</h6>
+                            <div class="weather_by_days">
+                                <div class="weather_by_day">
+                                    <p class="w-day">Player</p>
+                                    <p class="w-num"><a th:href="@{/profile/{id}(id = ${score.player.id})}" th:text="${score.player.username}">username</a></p>
                                     <div class="clearfix"></div>
                                 </div>
+                                <div class="weather-by-day">
+                                    <p class="w-day">Score</p>
+                                    <p class="w-num" th:text="${score.scoreValue}">score value</p>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="weather-by-day">
+                                    <p class="w-day">Score date</p>
+                                    <p class="w-num" th:text="${#dates.format(score.scoreDate, 'dd.MM.yyyy HH:mm:ss')}"></p>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="weather-by-day">
+                                    <p class="w-day">Sent date</p>
+                                    <p class="w-num" th:text="${#dates.format(score.sentDate, 'dd.MM.yyyy HH:mm:ss')}"></p>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <sec:authorize access="hasRole('ADMIN')">
+                                    <div class="weather-by-day">
+                                        <p class="w-day">Status</p>
+                                        <p class="w-num" th:text="${score.status}">status</p>
+                                        <div class="clearfix"></div>
+                                        <form th:action="@{/scores/pending/{id}(id = ${score.id})}" method="POST">
+                                            <input class="btn btn-success" type="submit" name="acceptScore" value="Accept" />
+                                            <input class="btn btn-danger" type="submit" name="rejectScore" value="Reject" />
+                                            <input type="hidden" name="redirect" value="score" />
+                                        </form>
+                                    </div>
+                                </sec:authorize>
                             </div>
-                            <p th:if="${#lists.isEmpty(games)}">No games.</p>
                         </div>
                     </div>
                 </div>

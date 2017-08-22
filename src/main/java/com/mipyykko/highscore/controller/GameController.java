@@ -5,11 +5,13 @@
  */
 package com.mipyykko.highscore.controller;
 
+import com.mipyykko.highscore.controller.common.HeaderInfo;
 import com.mipyykko.highscore.domain.Game;
 import com.mipyykko.highscore.domain.Player;
 import com.mipyykko.highscore.domain.Score;
 import com.mipyykko.highscore.service.GameService;
 import com.mipyykko.highscore.service.PlayerService;
+import com.mipyykko.highscore.service.ScoreService;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,7 +39,16 @@ public class GameController {
     private GameService gameService;
     @Autowired
     private PlayerService playerService;
+    @Autowired
+    private ScoreService scoreService;
+    @Autowired
+    private HeaderInfo headerInfo;
     
+    @ModelAttribute
+    public void addHeaderAttributes(Model model) {
+        model.addAllAttributes(headerInfo.getHeaderAttributes());
+    }
+
     @RequestMapping(method = RequestMethod.GET)
     public String getGames(Model model, 
             @RequestParam(required = false, defaultValue = "0") int start,
@@ -74,8 +85,10 @@ public class GameController {
         
         List<Score> scores = game.getScores()
                                 .stream()
-                                .filter(score -> score.isAccepted() || 
-                                        (player != null && score.getPlayer() == player))
+                                .filter(score -> score.isAccepted() || // always show accepted
+                                        (player != null 
+                                            && (score.getPlayer() == player || playerService.isAdmin()) 
+                                            && !score.isRejected())) // and pending, if logged in is admin or self
                                 .collect(Collectors.toList());
         Collections.sort(scores);
         model.addAttribute("game", game);
