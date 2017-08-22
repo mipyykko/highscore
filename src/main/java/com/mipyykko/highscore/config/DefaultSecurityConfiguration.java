@@ -26,7 +26,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  */
 @Profile("default")
 @Configuration
-@PropertySource("application.properties")
+//@PropertySource("application.properties")
 @EnableWebSecurity
 public class DefaultSecurityConfiguration extends WebSecurityConfigurerAdapter {
     
@@ -38,7 +38,6 @@ public class DefaultSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        // sallitaan framejen käyttö
         http.headers().frameOptions().sameOrigin();
 
         http.authorizeRequests()

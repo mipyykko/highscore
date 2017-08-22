@@ -14,7 +14,6 @@ import com.mipyykko.highscore.repository.PlayerRepository;
 import com.mipyykko.highscore.repository.ScoreRepository;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -27,19 +26,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import static sun.audio.AudioPlayer.player;
 
 /**
  *
  * @author pyykkomi
  */
 @RunWith(SpringRunner.class)
-@ContextConfiguration
 @SpringBootTest
 public class PlayerServiceTest {
     
