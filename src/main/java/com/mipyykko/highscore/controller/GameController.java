@@ -61,18 +61,18 @@ public class GameController {
         return "games";
     }
     
-    @RequestMapping(method = RequestMethod.POST)
-    public String saveGame(@RequestParam String name, 
-            @RequestParam String publisher,
-            @RequestParam String year,
-            @RequestParam(required = false, defaultValue = "0") Long id) {
-        Game game = id > 0 ? gameService.get(id) : new Game(name, publisher, year);
-        
-        if (game != null) {
-            gameService.save(game);
-        }
-        return "redirect:/games";
-    }
+//    @RequestMapping(method = RequestMethod.POST)
+//    public String saveGame(@RequestParam String name, 
+//            @RequestParam String publisher,
+//            @RequestParam String year,
+//            @RequestParam(required = false, defaultValue = "0") Long id) {
+//        Game game = id > 0 ? gameService.get(id) : new Game(name, publisher, year);
+//        
+//        if (game != null) {
+//            gameService.save(game);
+//        }
+//        return "redirect:/games";
+//    }
     
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public String getGame(Model model, @PathVariable Long id) {

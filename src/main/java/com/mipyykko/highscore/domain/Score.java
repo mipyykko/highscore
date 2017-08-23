@@ -119,8 +119,8 @@ public class Score extends AbstractPersistable<Long> implements Comparable<Score
     }
     
     public static class Comparators {
-        public static Comparator<Score> HIGHEST = (Score o1, Score o2) -> o1.getScoreValue().compareTo(o2.getScoreValue());
-        public static Comparator<Score> LOWEST = (Score o1, Score o2) -> o2.getScoreValue().compareTo(o1.getScoreValue());
+        public static Comparator<Score> LOWEST = (Score o1, Score o2) -> o1.getScoreValue().compareTo(o2.getScoreValue());
+        public static Comparator<Score> HIGHEST = (Score o1, Score o2) -> o2.getScoreValue().compareTo(o1.getScoreValue());
     }
     
     public enum Status {

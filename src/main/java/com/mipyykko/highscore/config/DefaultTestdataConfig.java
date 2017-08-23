@@ -67,12 +67,14 @@ public class DefaultTestdataConfig extends TestdataConfig {
         score3.setStatus(Score.Status.ACCEPTED);
         Score score4 = new Score(game2, test1, "90000", new Date(System.currentTimeMillis() - 3333));
         Score score5 = new Score(game2, test2, "999999999", new Date(System.currentTimeMillis() + 555));
-
+        Score score6 = new Score(game1, test1, "112123323", new Date(System.currentTimeMillis() - 23434));
+        
         scoreService.addScore(score1);
         scoreService.addScore(score2);
         scoreService.addScore(score3);
         scoreService.addScore(score4);
         scoreService.addScore(score5);
+        scoreService.addScore(score6);
         
         return true;
     }

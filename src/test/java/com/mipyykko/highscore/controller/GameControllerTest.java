@@ -5,11 +5,17 @@
  */
 package com.mipyykko.highscore.controller;
 
-import com.mipyykko.highscore.domain.Player;
+import com.mipyykko.highscore.domain.Score;
+import com.mipyykko.highscore.service.GameService;
 import com.mipyykko.highscore.service.PlayerService;
+import java.util.List;
+import java.util.Map;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,6 +50,8 @@ public class GameControllerTest {
     
     @Autowired
     private PlayerService playerService;
+    @Autowired
+    private GameService gameService;
     
     private MockMvc mockMvc;
     
@@ -86,6 +94,61 @@ public class GameControllerTest {
                .andExpect(content().string(containsString("999999999")))
                .andExpect(model().attributeExists("pendingScores"))
                .andExpect(model().attribute("currentuser", playerService.get(1l)));
+    }
     
+//    @Test
+//    public void testSave() throws Exception {
+//        mockMvc.perform(post("/games"))
+//               .andDo(print())
+//               .andExpect(status().is4xxClientError());
+//        mockMvc.perform(post("/games/666").with(user("test1").password("password")))
+//               .andExpect(status().is4xxClientError());
+//        mockMvc.perform(post("/games/").with(user("test1").password("password")))
+//               .andExpect(status().is3xxRedirection());
+//        mockMvc.perform(post("/games/")
+//                    .param("name", "testi4")
+//                    .param("publisher", "publisher")
+//                    .param("year", "year").with(user("test1").password("password")))
+//               .andDo(print())
+//               .andExpect(status().is3xxRedirection());
+//        mockMvc.perform(post("/games/")
+//                    .param("name", "testi5")
+//                    .param("publisher", "publisher")
+//                    .param("year", "year"))
+//               .andDo(print())
+//               .andExpect(status().is3xxRedirection());
+//     
+//        assertNotNull(gameService.findByName("testi4"));
+//        assertEquals("testi4", gameService.findByName("testi4").getName());
+//        assertNull(gameService.findByName("testi5"));
+//    }
+    
+    @Test
+    public void testGetGame() throws Exception {
+        mockMvc.perform(get("/games/999"))
+                .andExpect(status().is3xxRedirection());
+        mockMvc.perform(get("/games/1"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("game"))
+                .andExpect(model().attributeExists("scores"))
+                .andExpect(content().string(containsString("Peli 1")))
+                .andExpect(content().string(not(containsString("112123323"))))
+                .andExpect(content().string(containsString("11000")));
+        mockMvc.perform(get("/games/1").with(user("admin").password("password")))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("112123323")));
+        mockMvc.perform(get("/games/1").with(user("test1").password("password")))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("112123323")));
+        mockMvc.perform(get("/games/1").with(user("test2").password("password")))
+                .andExpect(status().isOk())
+                .andExpect(content().string(not(containsString("112123323"))));
+
+        Map<String, Object> model = mockMvc.perform(get("/games/1")).andReturn().getModelAndView().getModel();
+        assertTrue(model.containsKey("scores"));
+        List<Score> scores = (List<Score>) model.get("scores");
+        assertFalse(scores.isEmpty());
+        assertEquals("12320", scores.get(0).getScoreValue());
+        assertEquals("11000", scores.get(1).getScoreValue());
     }
 }
