@@ -5,7 +5,31 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-    <head>
+    <head th:fragment="head">
+        <title th:text="${title}">HighScore</title>
+        <link th:href="@{/css/bootstrap.css}" rel='stylesheet' type='text/css' />
+        <!-- Custom Theme files -->
+        <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css" media="all" />
+        <!-- Custom Theme files -->
+        <script th:src="@{/js/jquery.min.js}"></script>
+        <!-- Custom Theme files -->
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="keywords" content="My Secret Spot Ui Kit Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android  Compatible web template, 
+              Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+        <!--webfont-->
+        <link href='//fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css' />
+        <!-- chart -->
+        <script th:src="@{/js/Chart.js}"></script>
+        <!-- //chart -->    
+        <!-- Calender -->
+        <link rel="stylesheet" th:href="@{/css/clndr.css}" type="text/css" />
+        <script th:src="@{/js/underscore-min.js}" type="text/javascript"></script>
+        <script th:src="@{/js/moment-2.2.1.js}" type="text/javascript"></script>
+        <script th:src="@{/js/clndr.js}" type="text/javascript"></script>
+        <script th:src="@{/js/site.js}" type="text/javascript"></script>
+        <!-- End Calender -->
     </head>
     <body>
         <div class="header">
@@ -53,9 +77,8 @@ and open the template in the editor.
                                                     <input type="password" th:name="password" id="password" />
                                                 </fieldset>
                                                 <input type="submit" id="login" value="Sign in" />
-                                                <label for="checkbox"><input type="checkbox" id="checkbox" /><i>Remember me</i></label>
+                                                <input type="hidden" th:name="redirect" th:value="${redirect}" />
                                             </fieldset>
-                                            <span><a href="#">Forgot your password?</a></span>
                                         </form>
                                     </div>
                                 </div>
@@ -64,7 +87,7 @@ and open the template in the editor.
                                 <div id="loginpop"><a href="#" onclick="document.getElementById('logout-form').submit();"><span>Logout</span></a></div>
                             </div>
                             <form style="visibility: hidden" id="logout-form" method="post" th:action="@{/logout}"><input type="submit" value="Logout"/></form>                    
-                            <script src="js/menu_jquery.js"></script>
+                            <script th:src="@{/js/menu_jquery.js}"></script>
                         </div>
                         <div class="clearfix"></div>
                     </div>

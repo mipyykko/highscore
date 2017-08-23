@@ -86,7 +86,7 @@ public class DefaultControllerTest {
                .andExpect(model().attributeDoesNotExist("pendingScores"))
                .andExpect(content().string(containsString("Most active")));
         mockMvc.perform(get("/").with(user("admin").password("password").roles("USER", "ADMIN")))
-               .andExpect(model().attributeExists("games"))
+               .andExpect(model().attributeExists("popularGames"))
                .andExpect(model().attributeExists("activePlayers"))
                .andExpect(model().attributeExists("currentuser"))
                .andExpect(model().attributeExists("pendingScores"));

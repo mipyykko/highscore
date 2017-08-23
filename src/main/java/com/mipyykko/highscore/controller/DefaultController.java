@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,7 +59,16 @@ public class DefaultController {
     @RequestMapping(value = "/")
     public String index(Model model) {
         List<Game> games = gameService.getTopGames();
-        model.addAttribute("games", games);
+        Map<Game, Long> popularGames = new HashMap<>();
+        games.stream().forEach((g) -> {
+           popularGames.put(g,
+                   g.getScores()
+                        .stream()
+                        .filter(score -> score.isAccepted())
+                        .count());
+        });
+        model.addAttribute("popularGames", popularGames); 
+        // should be number of distinct players per game but I can't be bovvered
         
         List<Player> players = playerService.getMostActivePlayers();
         Map<Player, Long> activePlayers = new HashMap<>();
@@ -72,5 +82,5 @@ public class DefaultController {
         model.addAttribute("activePlayers", activePlayers);
         
         return "index";
-    }    
+    }
 }

@@ -4,18 +4,15 @@
         <title></title>
     </head>
     <body>
+        <!--/.navbar-->
         <div th:replace="fragments/header :: header(currentuser=${currentuser})"></div>
-        <!-- profile? -->
         <div class="content">
             <div class="container">
                 <div class="span_1_by_4">
-                    <div class="col-md-12 spansecound">
+                    <div class="col-md-6 spansecound">
                         <div class="span1">
-                            <h3 class="tlt">Pending scores</h3>
-                            <p th:if="${#lists.isEmpty(pendingScores)}">No pending scores</p>
-                            <div th:each="score : ${pendingScores}" class="weather_by_days">
-                                <div th:replace="fragments/pendingscore :: pendingscore(score = ${score})"></div>
-                            </div>
+                            <h3>Sorry, you're not authorized to do that. Please log in or register.</h3>
+                            <p><a th:href="@{/}">Go home.</a></p>
                         </div>
                     </div>
                 </div>

@@ -39,7 +39,8 @@ public class DefaultSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.headers().frameOptions().sameOrigin();
-
+        http.exceptionHandling().accessDeniedPage("/");
+        
         http.authorizeRequests()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/scores/pending*/**").hasAuthority("ADMIN")

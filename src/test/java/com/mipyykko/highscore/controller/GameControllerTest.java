@@ -5,7 +5,6 @@
  */
 package com.mipyykko.highscore.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mipyykko.highscore.domain.Game;
 import com.mipyykko.highscore.domain.Score;
 import com.mipyykko.highscore.service.GameService;
@@ -27,7 +26,6 @@ import org.mockito.Matchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -62,8 +60,6 @@ public class GameControllerTest {
     private PlayerService playerService;
     @Autowired
     private GameService gameService;
-    @Autowired
-    private ObjectMapper objectMapper;
 
     private MockMvc mockMvc;
     
