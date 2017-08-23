@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -111,6 +112,10 @@ public class GameController {
     
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String handleAddGame(Model model, @Validated @ModelAttribute Game game, BindingResult bindingResult) {
+        if (playerService.getAuthenticatedPlayer() == null) {
+            return "redirect:/";
+        }
+        
         if (gameService.findSimilar(game) != null) {
                 bindingResult.rejectValue("uniqueness", "errors.game", "Game is not unique enough!");
         }

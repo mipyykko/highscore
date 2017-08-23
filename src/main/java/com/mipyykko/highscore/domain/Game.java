@@ -5,6 +5,7 @@
  */
 package com.mipyykko.highscore.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -40,6 +41,7 @@ public class Game extends AbstractPersistable<Long> implements Comparable<Game> 
     private String publisher;
     @Column(name = "published_year")
     private String publishedYear;
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "game", cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Score> scores = new ArrayList<>();

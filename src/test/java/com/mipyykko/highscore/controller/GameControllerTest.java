@@ -5,6 +5,8 @@
  */
 package com.mipyykko.highscore.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mipyykko.highscore.domain.Game;
 import com.mipyykko.highscore.domain.Score;
 import com.mipyykko.highscore.service.GameService;
 import com.mipyykko.highscore.service.PlayerService;
@@ -15,6 +17,8 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,24 +26,30 @@ import org.junit.runner.RunWith;
 import org.mockito.Matchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.http.MediaType;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 /**
  *
  * @author pyykkomi
  */
-@RunWith(SpringRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @SpringBootTest
+//@WebMvcTest(GameController.class)
 public class GameControllerTest {
 
     @Autowired
@@ -52,7 +62,9 @@ public class GameControllerTest {
     private PlayerService playerService;
     @Autowired
     private GameService gameService;
-    
+    @Autowired
+    private ObjectMapper objectMapper;
+
     private MockMvc mockMvc;
     
     @Before
@@ -65,6 +77,26 @@ public class GameControllerTest {
         assertThat(gameController).isNotNull();
     }
     
+    private MockHttpServletRequestBuilder postAnonymousGamesForm(
+            String name, String publisher, String publishedYear) {
+        return post("/games/add")
+                .param("name", name)
+                .param("publisher", publisher)
+                .param("publishedYear", publishedYear)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .accept(MediaType.APPLICATION_FORM_URLENCODED);
+    }
+    
+    private MockHttpServletRequestBuilder postLoggedInGamesForm(
+            String name, String publisher, String publishedYear, String user, String password) {
+        return post("/games/add").with(user(user).password(password))
+                .param("name", name)
+                .param("publisher", publisher)
+                .param("publishedYear", publishedYear)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .accept(MediaType.APPLICATION_FORM_URLENCODED);
+    }
+
     @Test
     public void gamesTest() throws Exception {
         mockMvc.perform(get("/games"))
@@ -88,7 +120,7 @@ public class GameControllerTest {
                .andExpect(content().string(containsString("999999999")))
                .andExpect(model().attributeDoesNotExist("pendingScores"))
                .andExpect(model().attribute("currentuser", playerService.get(3l)));
-
+        
         mockMvc.perform(get("/games/2").with(user("admin").password("password")))
                .andExpect(status().isOk())
                .andExpect(content().string(containsString("999999999")))
@@ -150,5 +182,62 @@ public class GameControllerTest {
         assertFalse(scores.isEmpty());
         assertEquals("12320", scores.get(0).getScoreValue());
         assertEquals("11000", scores.get(1).getScoreValue());
+    }
+    
+    @Test
+    public void testShowAddGame() throws Exception {
+        mockMvc.perform(get("/games/add"))
+                .andExpect(status().is3xxRedirection());
+        Map<String, Object> model = 
+            mockMvc.perform(get("/games/add").with(user("test1").password("password")))
+                .andExpect(status().isOk())
+                .andReturn().getModelAndView().getModel();
+
+        assertTrue(model.containsKey("game"));
+        assertNotNull(model.get("game"));
+        assertTrue(model.get("game") instanceof Game);
+        
+        Game game = gameService.get(1l);
+        
+//        model = mockMvc.perform(get("/games/add")
+//                    .param("game.Id", Long.toString(game.getId()))
+//                    .param("game.name", game.getName())
+//                    .param("game.publisher", game.getPublisher())
+//                    .param("game.publishedYear", game.getPublishedYear()))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andReturn().getModelAndView().getModel();
+//        assertNotNull(model.get("game"));
+//        Game game2 = (Game) model.get("game");
+//        
+//        assertEquals("Peli 1", game2.getName());
+    }
+    
+    @Test
+    public void testHandleAddGame() throws Exception {
+        Game game1 = gameService.get(1l);
+        mockMvc.perform(postAnonymousGamesForm("anything", "", ""))
+            .andDo(print())
+            .andExpect(status().is3xxRedirection());
+        
+        assertNull(gameService.findByName("anything"));
+        
+        mockMvc.perform(postLoggedInGamesForm(
+                game1.getName(), game1.getPublisher(), game1.getPublishedYear(), 
+                "admin", "password"))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(model().attributeHasFieldErrors("game", "uniqueness"));
+
+        mockMvc.perform(postLoggedInGamesForm("", "", "", "admin", "password"))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(model().attributeHasFieldErrors("game", "name"));
+
+        mockMvc.perform(postLoggedInGamesForm("acceptable", "", "", "admin", "password"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(model().hasNoErrors());
+        
+        assertNotNull(gameService.findByName("acceptable"));
     }
 }
