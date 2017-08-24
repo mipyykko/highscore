@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Matchers;
+import static org.mockito.Mockito.mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -75,7 +76,7 @@ public class GameControllerTest {
     
     private MockHttpServletRequestBuilder postAnonymousGamesForm(
             String name, String publisher, String publishedYear) {
-        return post("/games/add")
+        return post("/games/add").sessionAttr("game", new Game())
                 .param("name", name)
                 .param("publisher", publisher)
                 .param("publishedYear", publishedYear)
@@ -85,7 +86,7 @@ public class GameControllerTest {
     
     private MockHttpServletRequestBuilder postLoggedInGamesForm(
             String name, String publisher, String publishedYear, String user, String password) {
-        return post("/games/add").with(user(user).password(password))
+        return post("/games/add").sessionAttr("game", new Game()).with(user(user).password(password))
                 .param("name", name)
                 .param("publisher", publisher)
                 .param("publishedYear", publishedYear)
@@ -182,10 +183,10 @@ public class GameControllerTest {
     
     @Test
     public void testShowAddGame() throws Exception {
-        mockMvc.perform(get("/games/add"))
+        mockMvc.perform(get("/games/add").sessionAttr("game", new Game()))
                 .andExpect(status().is3xxRedirection());
         Map<String, Object> model = 
-            mockMvc.perform(get("/games/add").with(user("test1").password("password")))
+            mockMvc.perform(get("/games/add").sessionAttr("game", new Game()).with(user("test1").password("password")))
                 .andExpect(status().isOk())
                 .andReturn().getModelAndView().getModel();
 

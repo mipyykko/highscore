@@ -14,11 +14,13 @@ import com.mipyykko.highscore.domain.Player;
 import com.mipyykko.highscore.service.GameService;
 import com.mipyykko.highscore.service.PlayerService;
 import com.mipyykko.highscore.service.ScoreService;
-import java.util.HashMap;
+import com.mipyykko.highscore.util.CountGame;
+import com.mipyykko.highscore.util.CountPlayer;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,27 +60,11 @@ public class DefaultController {
     
     @RequestMapping(value = "/")
     public String index(Model model) {
-        List<Game> games = gameService.getTopGames();
-        Map<Game, Long> popularGames = new HashMap<>();
-        games.stream().forEach((g) -> {
-           popularGames.put(g,
-                   g.getScores()
-                        .stream()
-                        .filter(score -> score.isAccepted())
-                        .count());
-        });
+        Map<Game, Long> popularGames = gameService.getPopularGames();
         model.addAttribute("popularGames", popularGames); 
         // should be number of distinct players per game but I can't be bovvered
-        
-        List<Player> players = playerService.getMostActivePlayers();
-        Map<Player, Long> activePlayers = new HashMap<>();
-        players.stream().forEach((p) -> {
-            activePlayers.put(p,
-                    p.getScores()
-                            .stream()
-                            .filter(score -> score.isAccepted())
-                            .count());
-        });
+
+        Map<Player, Long> activePlayers = playerService.getMostActivePlayers();
         model.addAttribute("activePlayers", activePlayers);
         
         return "index";

@@ -5,9 +5,9 @@
     <body>
         <div th:fragment="pendingscore">
             <form th:id="'pendingScoreForm' + ${score.id}" th:action="@{/scores/pending/{id}(id = ${score.id})}" method="POST">
-                <div class="weather_by_day">
+                <div class="pendingscore">
                         <h3><a th:href="@{/games/{id}(id = ${score.game.id})}" th:text="${score.game.name}">game name</a></h3>
-                        <h4 th:text="${score.scoreValue}">score</h4>
+                        <h4><a th:href="@{/score/{id}(id = ${score.id})}" th:text="${score.scoreValue}">score</a></h4>
                         <p class="w-day"><span th:text="${score.scoreDate}">score date</span></p>
                         <p class="w-num"><a th:href="@{/profile/{id}(id = ${score.player.id})}"><span th:text="${score.player.username}">player username</span></a></p>
                         <div class="clearfix"></div>

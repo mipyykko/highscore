@@ -9,44 +9,53 @@
         <div class="content">
             <div class="container">
                 <div class="span_1_by_4">
-                    <div class="col-md-6 spansecound">
+                    <div class="col-md-6 spanfirst">
                         <div class="span1">
                             <h3><a th:href="@{/games/{id}(id = score.game.id)}" th:text="${score.game.name}">game</a></h3>
                             <h5 th:text="${score.game.publisher}">publisher</h5>
                             <h6 th:text="${score.game.publishedYear}">year</h6>
-                            <div class="weather_by_days">
-                                <div class="weather_by_day">
-                                    <p class="w-day">Player</p>
-                                    <p class="w-num"><a th:href="@{/profile/{id}(id = ${score.player.id})}" th:text="${score.player.username}">username</a></p>
+                            <div class="score">
+                                <div class="score_entry">
+                                    <p class="score_label">Player</p>
+                                    <div class="clearfix"></div>
+                                    <p class="score_entry"><a th:href="@{/profile/{id}(id = ${score.player.id})}" th:text="${score.player.username}">username</a></p>
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="weather-by-day">
-                                    <p class="w-day">Score</p>
-                                    <p class="w-num" th:text="${score.scoreValue}">score value</p>
+                                <div class="score_entry">
+                                    <p class="score_label">Score</p>
+                                    <div class="clearfix"></div>
+                                    <p class="score_entry" th:text="${score.scoreValue}">score value</p>
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="weather-by-day">
-                                    <p class="w-day">Score date</p>
-                                    <p class="w-num" th:text="${#dates.format(score.scoreDate, 'dd.MM.yyyy HH:mm:ss')}"></p>
+                                <div class="score_entry">
+                                    <p class="score_label">Description</p>
+                                    <div class="clearfix"></div>
+                                    <p class="score_entry" th:text="${score.description}">description</p>
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="weather-by-day">
-                                    <p class="w-day">Sent date</p>
-                                    <p class="w-num" th:text="${#dates.format(score.sentDate, 'dd.MM.yyyy HH:mm:ss')}"></p>
+                                <div class="score_entry">
+                                    <p class="score_label">Score date</p>
+                                    <div class="clearfix"></div>
+                                    <p class="score_entry" th:text="${#dates.format(score.scoreDate, 'dd.MM.yyyy HH:mm:ss')}"></p>
                                     <div class="clearfix"></div>
                                 </div>
-                                <sec:authorize access="hasRole('ADMIN')">
-                                    <div class="weather-by-day">
-                                        <p class="w-day">Status</p>
-                                        <p class="w-num" th:text="${score.status}">status</p>
-                                        <div class="clearfix"></div>
-                                        <form th:action="@{/scores/pending/{id}(id = ${score.id})}" method="POST">
-                                            <input class="btn btn-success" type="submit" name="acceptScore" value="Accept" />
-                                            <input class="btn btn-danger" type="submit" name="rejectScore" value="Reject" />
-                                            <input type="hidden" name="redirect" value="score" />
-                                        </form>
-                                    </div>
-                                </sec:authorize>
+                                <div class="score_entry">
+                                    <p class="score_label">Sent date</p>
+                                    <div class="clearfix"></div>
+                                    <p class="score_entry" th:text="${#dates.format(score.sentDate, 'dd.MM.yyyy HH:mm:ss')}"></p>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div sec:authorize="hasAuthority('ADMIN')" class="score_entry">
+                                    <p class="score_label">Status</p>
+                                    <div class="clearfix"></div>
+                                    <p class="score_entry" th:text="${score.status}">status</p>
+                                    <div class="clearfix"></div>
+                                    <form th:action="@{/scores/pending/{id}(id = ${score.id})}" method="POST">
+                                        <input class="btn btn-success" type="submit" name="acceptScore" value="Accept" />
+                                        <input class="btn btn-danger" type="submit" name="rejectScore" value="Reject" />
+                                        <input type="hidden" name="redirect" value="score" />
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>

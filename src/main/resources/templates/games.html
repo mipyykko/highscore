@@ -9,17 +9,23 @@
         <div class="content">
             <div class="container">
                 <div class="span_1_by_4">
-                    <div class="col-md-12 spansecound">
+                    <div class="col-md-6 spansecound">
                         <div class="span1">
                             <h3 class="tlt">Games</h3>
-                            <div class="weather_by_days" th:each="game : ${games}">
+                            <div class="weather_by_days">
                                 <div class="weather_by_day">
-                                    <p class="w-day"><a th:href="@{/games/{id}(id=${game.id})}"><span th:text="${game.name}">game</span></a></p>
-                                    <p class="w-num"><span th:text="${game.scores.size()}">0</span></p>
-                                    <div class="clearfix"></div>
+                                    <p class="w-day">title</p>
+                                    <p class="w-num">scores</p>
                                 </div>
                             </div>
-                            <div sec:authorize="isAuthenticated()"><a th:href="@{/games/add}">Add game...</a></div>
+                            <div class="weather_by_days" th:each="game : ${games}">
+                                <div class="weather_by_day">
+                                    <p class="w-day"><a th:href="@{/games/{id}(id=${game.key.id})}"><span th:text="${game.key.name}">game</span></a></p>
+                                    <p class="w-num"><span th:text="${game.value}">0</span></p>
+                                </div>
+                            </div>
+                            <div th:replace="fragments/pager :: pager(${pager}, 'games')" />
+                            <div sec:authorize="isAuthenticated()"><a class="btn btn-default" th:href="@{/games/add}">Add game...</a></div>
                         </div>
                     </div>
                 </div>

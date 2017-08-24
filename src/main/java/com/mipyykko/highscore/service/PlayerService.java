@@ -8,12 +8,18 @@ package com.mipyykko.highscore.service;
 import com.mipyykko.highscore.domain.Game;
 import com.mipyykko.highscore.domain.Player;
 import com.mipyykko.highscore.repository.PlayerRepository;
+import com.mipyykko.highscore.util.CountPlayer;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
 import java.util.stream.Collectors;
-import javax.persistence.Tuple;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -49,6 +55,10 @@ public class PlayerService {
         return playerRepository.save(player);
     }
     
+    public Long playerCount() {
+        return playerRepository.count();
+    }
+    
     public List<Game> getGamesByPlayer(Long id) {
         Player player = playerRepository.findOne(id);
         
@@ -58,11 +68,18 @@ public class PlayerService {
         
         return player.getScores().stream().map(score -> score.getGame()).distinct().collect(Collectors.toList());
     }
-    public List<Player> getMostActivePlayers() {
-        return playerRepository.findMostActivePlayers();
+    public Map<Player, Long> getMostActivePlayers() {
+        List<CountPlayer> players = playerRepository.findMostActivePlayers();
+        Collections.sort(players);
+        Map<Player, Long> map = new LinkedHashMap<>();
+        players.forEach(cp -> map.put(cp.getPlayer(), cp.getCount()));
+        return map;
     }
     
-    public List<Player> getPlayers() {
-        return playerRepository.findAll();
+    public Page<Player> getPlayers(int page, int length, String direction, String criteria) {
+        Pageable pageable = new PageRequest(page, length > 0 ? length : 25, 
+                direction.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC,
+                criteria); 
+        return playerRepository.findAll(pageable);
     }
 }

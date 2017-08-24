@@ -34,6 +34,11 @@
                                         <p class="error" th:if="${#fields.hasErrors('scoreValue')}" th:errors="*{scoreValue}">score error</p>
                                         <input name="score" th:field="*{scoreValue}" />
                                     </fieldset>
+                                    <fieldset>
+                                        <label for="description">Description</label>
+                                        <p class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">description error</p>
+                                        <textarea id="description" cols="40" rows="5" name="description" th:field="*{description}" />
+                                    </fieldset>
                                     <input type="submit" value="Submit" />
                                 </fieldset>
                             </form>

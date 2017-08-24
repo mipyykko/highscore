@@ -11,7 +11,7 @@
                 <div class="span_1_by_4">
                     <div class="col-md-6 spanfirst">
                         <div class="span1">
-                            <h2>Edit profile</h2>
+                            <h3 class="tlt">Edit profile</h3>
                             <form id="loginForm" th:action="@{/profile/edit}" th:object="${formPlayer}" method="POST">
                                 <fieldset id="body">
                                     <fieldset>
@@ -49,7 +49,7 @@
                                         <label for="description">Description</label>
                                         <textarea th:field="*{description}"></textarea>
                                     </fieldset>
-                                    <input class="btn btn-success" type="submit" id="submit" value="Submit" />
+                                    <input class="btn btn-primary" type="submit" id="submit" value="Submit" />
                                 </fieldset>
                             </form>
                         </div>

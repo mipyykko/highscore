@@ -12,12 +12,15 @@ import com.mipyykko.highscore.domain.Score;
 import com.mipyykko.highscore.service.GameService;
 import com.mipyykko.highscore.service.PlayerService;
 import com.mipyykko.highscore.service.ScoreService;
+import com.mipyykko.highscore.util.Pager;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.support.SessionStatus;
 
 /**
  *
@@ -52,12 +56,27 @@ public class GameController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String getGames(Model model, 
-            @RequestParam(required = false, defaultValue = "0") int start,
-            @RequestParam(required = false, defaultValue = "25") int length,
-            @RequestParam(required = false, defaultValue = "asc") String direction,
-            @RequestParam(required = false, defaultValue = "name") String criteria) {
-        Page<Game> gamePage = gameService.getGames(start, length, direction, criteria);
-        model.addAttribute("games", gamePage.getContent());
+            @RequestParam(value = "page") Optional<Integer> page,
+            @RequestParam(value = "length") Optional<Integer> length,
+            @RequestParam(value = "direction") Optional<String> direction,
+            @RequestParam(value = "criteria") Optional<String> criteria) {
+        int pageLength = Math.max(length.orElse(10), 1);
+        int currentPage = Math.min(Math.max(page.orElse(1), 1), Math.max(1, (int) (gameService.gameCount() / pageLength)));
+        
+        // 1 >= page <= amount of pages
+        
+        Page<Game> gamePage = 
+                gameService.getGames(currentPage - 1, pageLength, 
+                                     direction.orElse("asc"), criteria.orElse("name"));
+        Pager pager = new Pager(currentPage, gamePage.getTotalPages(), pageLength);
+        Map<Game, Long> games = new LinkedHashMap<>();
+        gamePage.forEach(g -> games.put(g, g.getScores()
+                .stream()
+                .filter(s -> s.isAccepted())
+                .count()));
+
+        model.addAttribute("games", games);
+        model.addAttribute("pager", pager);
         
         return "games";
     }
@@ -98,7 +117,7 @@ public class GameController {
     }
     
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String showAddGame(Model model, @ModelAttribute Game game) {
+    public String showAddGame(Model model, @ModelAttribute Game game, SessionStatus sessionStatus) {
         Player player = playerService.getAuthenticatedPlayer();
         
         if (player == null) {
@@ -106,18 +125,30 @@ public class GameController {
         }
         
         model.addAttribute("game", game);
-        
         return "addgame";
     }
     
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    public String showEditGame(Model model, @PathVariable Long id) {
+        Game game = gameService.get(id);
+        if (game == null || playerService.getAuthenticatedPlayer() == null) {
+            return "redirect:/";
+        }
+        model.addAttribute("game", game);
+        
+        return "editgame";
+    }
+    
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String handleAddGame(Model model, @Validated @ModelAttribute Game game, BindingResult bindingResult) {
+    public String handleAddGame(Model model, 
+            @Validated @ModelAttribute Game game, 
+            BindingResult bindingResult) {
         if (playerService.getAuthenticatedPlayer() == null) {
             return "redirect:/";
         }
         
-        if (gameService.findSimilar(game) != null) {
-                bindingResult.rejectValue("uniqueness", "errors.game", "Game is not unique enough!");
+        if (!gameService.findSimilar(game).isEmpty()) {
+            bindingResult.rejectValue("uniqueness", "errors.game", "Game is not unique enough!");
         }
 
         if (bindingResult.hasErrors()) {
@@ -126,5 +157,31 @@ public class GameController {
         
         gameService.save(game);
         return "redirect:/";
+    }
+    
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    public String handleEditGame(Model model, 
+            @Validated @ModelAttribute("editGame") Game game,
+            BindingResult bindingResult) {
+        if (playerService.getAuthenticatedPlayer() == null) {
+            return "redirect:/";
+        }
+
+        List<Game> similar = gameService.findSimilar(game);
+        if (!similar.isEmpty()) {
+            for (Game g : similar) {
+                if (!g.getId().equals(game.getId())) {
+                    bindingResult.rejectValue("uniqueness", "errors.game", "Game is not unique enough!");
+                    break;
+                }
+            }
+        }
+        
+        if (bindingResult.hasErrors()) {
+            return "redirect:/games/edit/" + game.getId();
+        }
+        
+        gameService.update(game);
+        return "redirect:/games/" + game.getId();
     }
 }

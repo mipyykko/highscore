@@ -31,7 +31,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 @Table(uniqueConstraints = {
     @UniqueConstraint(columnNames = {"name", "publisher", "published_year"})
 })
-public class Game extends AbstractPersistable<Long> implements Comparable<Game> {
+public class Game extends AbstractPersistable<Long>/* implements Comparable<Game> */{
     
     @NotBlank(message = "Name cannot be empty!")
     @Length(max = 128, message = "Name can be at most 128 characters")
@@ -45,6 +45,7 @@ public class Game extends AbstractPersistable<Long> implements Comparable<Game> 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "game", cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Score> scores = new ArrayList<>();
+    private ScoreSortType scoreSortType;
     private ScoreType scoreType;
     
     // for error
@@ -52,7 +53,8 @@ public class Game extends AbstractPersistable<Long> implements Comparable<Game> 
     private String uniqueness;
     
     public Game() {
-        this.scoreType = ScoreType.HIGHEST;
+        this.scoreSortType = ScoreSortType.HIGHEST;
+        this.scoreType = ScoreType.LONG;
     }
     
     public Game(String name, String publisher, String publishedYear) {
@@ -92,6 +94,14 @@ public class Game extends AbstractPersistable<Long> implements Comparable<Game> 
 
     public void setScores(List<Score> scores) {
         this.scores = scores;
+    }
+
+    public ScoreSortType getScoreSortType() {
+        return scoreSortType;
+    }
+
+    public void setScoreSortType(ScoreSortType scoreSortType) {
+        this.scoreSortType = scoreSortType;
     }
 
     public ScoreType getScoreType() {
@@ -135,12 +145,16 @@ public class Game extends AbstractPersistable<Long> implements Comparable<Game> 
         return true;
     }
 
-    @Override
+//    @Override
     public int compareTo(Game o) {
         return this.hashCode() - o.hashCode();
     }
 
-    public enum ScoreType {
+    public enum ScoreSortType {
         HIGHEST, LOWEST
+    }
+    
+    public enum ScoreType {
+        LONG, PERCENTAGE, STRING, UNDEFINED
     }
 }

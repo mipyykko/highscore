@@ -12,10 +12,14 @@ import com.mipyykko.highscore.domain.FormPlayer;
 import com.mipyykko.highscore.domain.Score;
 import com.mipyykko.highscore.service.PlayerService;
 import com.mipyykko.highscore.service.ScoreService;
+import com.mipyykko.highscore.util.Pager;
 import com.mipyykko.highscore.util.PlayerConverter;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,6 +34,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -171,10 +176,26 @@ public class PlayerController {
     }
     
     @RequestMapping(value = "/players", method = RequestMethod.GET)
-    public String getPlayers(Model model) {
-        List<Player> players = playerService.getPlayers();
+    public String getPlayers(Model model,
+            @RequestParam(value = "page") Optional<Integer> page,
+            @RequestParam(value = "length") Optional<Integer> length,
+            @RequestParam(value = "direction") Optional<String> direction,
+            @RequestParam(value = "criteria") Optional<String> criteria) {
+        int pageLength = Math.max(length.orElse(10), 1);
+        int currentPage = Math.min(Math.max(page.orElse(1), 1), Math.max(1, (int) (playerService.playerCount() / pageLength)));
+
+        Page<Player> playerPage = 
+                playerService.getPlayers(currentPage - 1, pageLength, 
+                        direction.orElse("asc"), criteria.orElse("username"));
+        Pager pager = new Pager(currentPage, playerPage.getTotalPages(), pageLength);
+        Map<Player, Long> players = new LinkedHashMap<>();
+        playerPage.forEach(p -> players.put(p, p.getScores()
+                .stream()
+                .filter(s -> s.isAccepted())
+                .count()));
         
         model.addAttribute("players", players);
+        model.addAttribute("pager", pager);
         return "players";
         
     }

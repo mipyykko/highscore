@@ -6,8 +6,9 @@
 package com.mipyykko.highscore.repository;
 
 import com.mipyykko.highscore.domain.Player;
+import com.mipyykko.highscore.util.CountGame;
+import com.mipyykko.highscore.util.CountPlayer;
 import java.util.List;
-import java.util.Map.Entry;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -18,8 +19,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface PlayerRepository extends JpaRepository<Player, Long> {
     Player findByUsername(String username);
     
-    @Query("select p from Player p left join p.scores sc "
+    @Query("select new com.mipyykko.highscore.util.CountPlayer(p, count(sc)) from Player p left join p.scores sc "
          + "where sc.status = 'ACCEPTED' group by p order by count(sc) desc")
-//    @Query("select p from Player p where p.scores.size > 0 order by p.scores.size desc")
-    List<Player> findMostActivePlayers();
+    List<CountPlayer> findMostActivePlayers();
+    @Query("select new com.mipyykko.highscore.util.CountGame(ps.game, count(ps.game)) from Player p "
+        + "left join p.scores ps where ps.status = 'ACCEPTED' group by ps.game order by count(ps.game) desc")
+    List<CountGame> findMostPopularGames();
 }

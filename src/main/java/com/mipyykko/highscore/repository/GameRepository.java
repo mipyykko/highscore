@@ -19,6 +19,6 @@ public interface GameRepository extends JpaRepository<Game, Long> {
     @Query("select g from Game g where g.scores.size > 0 order by g.scores.size desc")
     List<Game> findMostPopularGames();
     Game findByName(String name);
-    Game findByNameAndPublisherAndPublishedYear(String name, String publisher, String publishedYear);
+    List<Game> findByNameAndPublisherAndPublishedYear(String name, String publisher, String publishedYear);
     
 }

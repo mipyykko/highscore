@@ -53,13 +53,14 @@ public class DefaultTestdataConfig extends TestdataConfig {
         Game game1 = new Game("Peli 1", "Game Company", "1998");
         Game game2 = new Game("Peli 2", "Game Company", "2012");
         
-        game1.setScoreType(Game.ScoreType.HIGHEST);
-        game2.setScoreType(Game.ScoreType.LOWEST);
+        game1.setScoreSortType(Game.ScoreSortType.HIGHEST);
+        game2.setScoreSortType(Game.ScoreSortType.LOWEST);
         
         gameService.save(game1);
         gameService.save(game2);
         
         Score score1 = new Score(game1, test1, "12320", new Date(System.currentTimeMillis()));
+        score1.setDescription("Nice!");
         score1.setStatus(Score.Status.ACCEPTED);
         Score score2 = new Score(game1, test2, "11000", new Date(System.currentTimeMillis() - 1000));
         score2.setStatus(Score.Status.ACCEPTED);
@@ -67,8 +68,10 @@ public class DefaultTestdataConfig extends TestdataConfig {
         score3.setStatus(Score.Status.ACCEPTED);
         Score score4 = new Score(game2, test1, "90000", new Date(System.currentTimeMillis() - 3333));
         Score score5 = new Score(game2, test2, "999999999", new Date(System.currentTimeMillis() + 555));
+        score5.setDescription("This is a long descriptionThis is a long descriptionThis is a long descriptionThis is a long description");
         Score score6 = new Score(game1, test1, "112123323", new Date(System.currentTimeMillis() - 23434));
-        
+        score6.setDescription("I swear this is real!!!");
+
         scoreService.addScore(score1);
         scoreService.addScore(score2);
         scoreService.addScore(score3);

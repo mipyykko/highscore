@@ -68,13 +68,23 @@ public class GameServiceTest {
     }
 
     @Test
-    public void testSaveAndDelete() {
+    public void testSaveUpdateAndDelete() {
         Game game = new Game("test1", "publisher1", "1999");
-        gameService.save(game);
+        game = gameService.save(game);
 
         Game repGame = gameRepository.findByName("test1");
         assertNotNull(repGame);
         assertEquals("test1", repGame.getName());
+
+        Long gameId = game.getId();
+        
+        game.setPublisher("something else");
+        gameService.update(game);
+        
+        repGame = gameRepository.findByName("test1");
+        assertNotNull(repGame);
+        assertEquals(gameId, repGame.getId());
+        assertEquals("something else", repGame.getPublisher());
 
         gameService.delete(game);
         repGame = gameRepository.findByName("test1");
@@ -159,13 +169,13 @@ public class GameServiceTest {
         Game game4 = new Game("test4", "not equal", "1998");
         Game game5 = new Game("test4", "Game Company", "not equal");
         
-        assertNotNull(gameService.findSimilar(game2));
+        assertTrue(!gameService.findSimilar(game2).isEmpty());
 
-        assertEquals(gameService.findSimilar(game2).getName(), game1.getName());
+        assertEquals(gameService.findSimilar(game2).get(0).getName(), game1.getName());
         
-        assertNull(gameService.findSimilar(game3));
-        assertNull(gameService.findSimilar(game4));
-        assertNull(gameService.findSimilar(game5));
+        assertTrue(gameService.findSimilar(game3).isEmpty());
+        assertTrue(gameService.findSimilar(game4).isEmpty());
+        assertTrue(gameService.findSimilar(game5).isEmpty());
 
         gameRepository.delete(game1);
     }

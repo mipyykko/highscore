@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <div class="pager" th:fragment="pager(pager, url)">
+            <ul class="pager" style="text-align: center"> 
+                <li th:class="${pager.current le 1} ? 'disabled' : ''"><a th:href="@{/{url}/(url = ${url}, page = 1, length = ${pager.perPage})}">&lt;&lt;</a></li>
+                <li th:class="${pager.current le 1} ? 'disabled' : ''"><a th:href="@{/{url}/(url = ${url}, page = ${pager.current} - 1, length = ${pager.perPage})}">&lt;</a></li>
+                <li style="text-align: center" th:text="${pager.current}">page #</li>
+                <li th:class="${pager.current ge pager.total} ? 'disabled' : ''"><a th:href="@{/{url}/(url = ${url}, page = ${pager.current + 1}, length = ${pager.perPage})}">&gt;</a></li>
+                <li th:class="${pager.current ge pager.total} ? 'disabled' : ''"><a th:href="@{/{url}/(url = ${url}, page = ${pager.total}, length = ${pager.perPage})}">&gt;&gt;</a></li>
+            </ul>
+        </div>
+    </body>
+</html>

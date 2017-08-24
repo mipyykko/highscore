@@ -23,10 +23,14 @@
                                     <p class="w-num" th:style="not ${score.isAccepted()} ? 'font-style: italic' : ''">
                                         <a th:href="@{/scores/{id}(id = ${score.id})}" th:text="${score.scoreValue}">score</a>
                                     </p>
-                                    <div class="clearfix"></div>
                                 </div>
                             </div>
-                            <div sec:authorize="isAuthenticated()"><a th:href="@{/scores/add/{id}(id = ${game.id})}">Add score...</a></div>
+                            <br />
+                            <div>
+                                <a sec:authorize="hasAuthority('ADMIN')" class="btn btn-danger" th:href="@{/games/edit/{id}(id = ${game.id})}">Edit game...</a>
+                                <a sec:authorize="isAuthenticated()" class="btn btn-default" th:href="@{/scores/add/{id}(id = ${game.id})}">Add score...</a>
+                                <div class="clearfix"></div>
+                            </div>
                         </div>
                     </div>
                 </div>

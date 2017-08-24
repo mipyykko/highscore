@@ -321,6 +321,15 @@ fieldset#body {
   font-size: 1em;
   font-style: normal;
 }
+
+#pager {
+    text-align: center
+}
+
+#pager a {
+    font-size: 4em;
+    border: 1px;
+}
 #loginForm span a {
   color:#34353a;
   font-size: 0.85em;
@@ -776,6 +785,33 @@ p.profile_field {
     font-size: 1.2em;
 }
 
+.score {
+    padding: 25px 12px 5px;
+}
+
+.score_entry {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.score_entry:last-child {
+    border-bottom: none;
+}
+
+p.score_label {
+    float: left;
+    color: #898989;
+    font-size: 1em;
+    letter-spacing: 1px;
+}
+
+p.score_field {
+    float: left;
+    color: #989898;
+    font-size: 1.2em;
+}
+
 .weather_by_days{
 	padding:25px 12px 5px;
 }
@@ -786,6 +822,26 @@ p.profile_field {
 }
 .weather_by_day:last-child {
 	border-bottom:none;
+}
+
+.pendingscores {
+    padding: 25px 12px 5px;
+    border 1px 1px 1px 1px;
+}
+
+.pendingscore {
+    border: 1px solid #eee;
+    padding: 10px;
+}
+
+.pendingscore:last-child {
+    border-bottom: none;
+}
+
+textarea.description {
+-webkit-box-sizing: border-box;
+   -moz-box-sizing: border-box;
+        box-sizing: border-box;
 }
 p.w-day {
 	float:left;
@@ -1875,7 +1931,7 @@ ul.callbacks_tabs.callbacks1_tabs {
 /*-- footer-starts-here --*/
 .footer {
     background-color: #383331;
-    padding: 4em 0;
+    padding: 2em 0;
     margin-top: 1.2em;
 }
 .footer-grid h3 {
@@ -1895,8 +1951,8 @@ ul.callbacks_tabs.callbacks1_tabs {
 	margin-top:0.5em;
 }
 .copyrights {
-    margin-top: 2em;
-    padding-top: 2em;
+    margin-top: 1em;
+    padding-top: 1em;
     border-top: 1px solid #423E3C;
 }
 .copyrights p {

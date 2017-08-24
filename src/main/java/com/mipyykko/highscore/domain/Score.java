@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -38,6 +39,8 @@ public class Score extends AbstractPersistable<Long> implements Comparable<Score
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date sentDate;
+    @Length(max = 255, message = "Description can be at most 255 characters!")
+    private String description;
     // private Screenshot screenshot;
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -102,6 +105,14 @@ public class Score extends AbstractPersistable<Long> implements Comparable<Score
     public void setSentDate(Date sentDate) {
         this.sentDate = sentDate;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
     
     public boolean isAccepted() {
         return this.status == Status.ACCEPTED;
@@ -113,14 +124,36 @@ public class Score extends AbstractPersistable<Long> implements Comparable<Score
     
     @Override
     public int compareTo(Score o) {
-        return this.game.getScoreType() == Game.ScoreType.LOWEST
+        return this.game.getScoreSortType() == Game.ScoreSortType.LOWEST
             ? Comparators.LOWEST.compare(this, o) 
             : Comparators.HIGHEST.compare(this, o);
     }
     
     public static class Comparators {
-        public static Comparator<Score> LOWEST = (Score o1, Score o2) -> o1.getScoreValue().compareTo(o2.getScoreValue());
-        public static Comparator<Score> HIGHEST = (Score o1, Score o2) -> o2.getScoreValue().compareTo(o1.getScoreValue());
+        public static Comparator<Score> LOWEST = (Score o1, Score o2) -> {
+            if (!o1.getGame().getScoreType().equals(o2.getGame().getScoreType())) {
+                return 0;
+            }
+            
+            switch (o1.getGame().getScoreType()) {
+                case LONG:
+                    Long o1score = Long.parseLong(o1.getScoreValue());
+                    Long o2score = Long.parseLong(o2.getScoreValue());
+                    return o1score.compareTo(o2score);
+                default:
+                    return o1.getScoreValue().compareTo(o2.getScoreValue());
+            }
+        };
+        public static Comparator<Score> HIGHEST = (Score o1, Score o2) -> {
+            switch (o1.getGame().getScoreType()) {
+                case LONG:
+                    Long o1score = Long.parseLong(o1.getScoreValue());
+                    Long o2score = Long.parseLong(o2.getScoreValue());
+                    return -o1score.compareTo(o2score);
+                default:
+                    return -o1.getScoreValue().compareTo(o2.getScoreValue());
+            }
+        };
     }
     
     public enum Status {

@@ -9,11 +9,11 @@
         <div class="content">
             <div class="container">
                 <div class="span_1_by_4">
-                    <div class="col-md-12 spansecound">
+                    <div class="col-md-6 spansecound">
                         <div class="span1">
                             <h3 class="tlt">Pending scores</h3>
                             <p th:if="${#lists.isEmpty(pendingScores)}">No pending scores</p>
-                            <div th:each="score : ${pendingScores}" class="weather_by_days">
+                            <div th:each="score : ${pendingScores}" class="pendingscores">
                                 <div th:replace="fragments/pendingscore :: pendingscore(score = ${score})"></div>
                             </div>
                         </div>

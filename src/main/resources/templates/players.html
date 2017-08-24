@@ -19,14 +19,22 @@ License URL: http://creativecommons.org/licenses/by/3.0/
         <div class="content">
             <div class="container">
                 <div class="span_1_by_4">
-                    <div class="col-lg-12 spanfirst">
+                    <div class="col-md-6 spansecound">
                         <div class="span1">
-                            <h3>Players</h3>
-                            <div class="weather-by-days" th:each="player : ${players}">
-                                <p class="w-day"><a th:href="@{/profile/{id}(id = ${player.id})}"><span th:text="${player.username}">username</span></a></p>
-                                <p class="w-num"></p>
-                                <div class="clearfix"></div>
+                            <h3 class="tlt">Players</h3>
+                            <div class="weather_by_days">
+                                <div class="weather_by_day">
+                                    <p class="w-day">username</p>
+                                    <p class="w-num">scores</p>
+                                </div>
                             </div>
+                            <div class="weather_by_days" th:each="player : ${players}">
+                                <div class="weather_by_day">
+                                    <p class="w-day"><a th:href="@{/profile/{id}(id = ${player.key.id})}"><span th:text="${player.key.username}">username</span></a></p>
+                                    <p class="w-num"><span th:text="${player.value}">0</span></p>
+                                </div>
+                            </div>
+                            <div th:replace="fragments/pager :: pager(${pager}, 'players')" />
                         </div>
                     </div>
                 </div>

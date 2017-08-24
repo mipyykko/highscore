@@ -32,7 +32,7 @@ public class ProductionTestdataConfig extends TestdataConfig {
     @Bean
     @Override
     public boolean init() {
-        if (!playerService.getPlayers().isEmpty()) {
+        if (playerService.playerCount() == 0) {
             // only init at first deploy
             return false;
         }

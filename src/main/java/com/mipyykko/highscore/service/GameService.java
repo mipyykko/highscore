@@ -7,8 +7,14 @@ package com.mipyykko.highscore.service;
 
 import com.mipyykko.highscore.domain.Game;
 import com.mipyykko.highscore.repository.GameRepository;
+import com.mipyykko.highscore.repository.PlayerRepository;
 import com.mipyykko.highscore.repository.ScoreRepository;
+import com.mipyykko.highscore.util.CountGame;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,10 +34,25 @@ public class GameService {
     private GameRepository gameRepository;
     @Autowired
     private ScoreRepository scoreRepository;
+    @Autowired
+    private PlayerRepository playerRepository;
     
     public Game get(Long id) {
         return gameRepository.findOne(id);
     }
+    
+    public Long gameCount() {
+        return gameRepository.count();
+    }
+    
+    public Map<Game, Long> getPopularGames() {
+        List<CountGame> list = playerRepository.findMostPopularGames();
+        Collections.sort(list);
+        Map<Game, Long> map = new LinkedHashMap<>();
+        list.forEach(cg -> map.put(cg.getGame(), cg.getCount()));
+        return map;
+    }
+    
     
     public List<Game> getTopGames() {
         return gameRepository.findMostPopularGames();
@@ -45,7 +66,7 @@ public class GameService {
         return gameRepository.findAll(pageable);
     }
     
-    public Game findSimilar(Game game) {
+    public List<Game> findSimilar(Game game) {
         return gameRepository.findByNameAndPublisherAndPublishedYear(game.getName(), game.getPublisher(), game.getPublishedYear());
     }
     
@@ -58,6 +79,15 @@ public class GameService {
         return gameRepository.save(game);
     }
     
+    @Transactional
+    public Game update(Game game) {
+        Game updating = gameRepository.getOne(game.getId());
+        updating.setName(game.getName());
+        updating.setPublisher(game.getPublisher());
+        updating.setPublishedYear(game.getPublishedYear());
+        updating.setScoreSortType(game.getScoreSortType());
+        return gameRepository.save(updating);
+    }
     @Transactional
     public Game delete(Game game) {
         gameRepository.delete(game);

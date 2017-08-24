@@ -13,7 +13,10 @@ import com.mipyykko.highscore.repository.GameRepository;
 import com.mipyykko.highscore.repository.PlayerRepository;
 import com.mipyykko.highscore.repository.ScoreRepository;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -24,6 +27,7 @@ import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -171,18 +175,21 @@ public class PlayerServiceTest {
     @Test
     public void testGetMostActivePlayers() {
         addTestData();
-        List<Player> players = playerService.getMostActivePlayers();
+        Map<Player, Long> players = playerService.getMostActivePlayers();
         assertNotNull(players);
-        assertEquals(players.get(0).getId(), player1.getId());
-        assertEquals(players.get(1).getId(), player2.getId());
+        Iterator<Entry<Player, Long>> it = players.entrySet().iterator();
+        assertEquals(it.next().getKey().getId(), player1.getId());
+        assertEquals(it.next().getKey().getId(), player2.getId());
         flushTestData();
     }
 
     @Test
     public void testGetPlayers() {
         addTestData();
-        List<Player> players = playerService.getPlayers();
-        assertEquals(2, players.size());
+        Page<Player> players = playerService.getPlayers(0, 25, "desc", "username");
+        assertEquals(2, players.getTotalElements());
+        players = playerService.getPlayers(0, 1, "desc", "username");
+        assertEquals(2, players.getTotalPages());
         flushTestData();
     }
     
