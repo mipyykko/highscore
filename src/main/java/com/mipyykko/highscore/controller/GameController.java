@@ -161,7 +161,7 @@ public class GameController {
     
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String handleEditGame(Model model, 
-            @Validated @ModelAttribute("editGame") Game game,
+            @Validated @ModelAttribute Game game,
             BindingResult bindingResult) {
         if (playerService.getAuthenticatedPlayer() == null) {
             return "redirect:/";
