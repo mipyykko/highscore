@@ -8,7 +8,7 @@ package com.mipyykko.highscore.controller;
 import com.mipyykko.highscore.auth.JpaAuthenticationProvider;
 import com.mipyykko.highscore.controller.common.HeaderInfo;
 import com.mipyykko.highscore.domain.Player;
-import com.mipyykko.highscore.domain.FormPlayer;
+import com.mipyykko.highscore.domain.forms.FormPlayer;
 import com.mipyykko.highscore.domain.Score;
 import com.mipyykko.highscore.service.PlayerService;
 import com.mipyykko.highscore.service.ScoreService;

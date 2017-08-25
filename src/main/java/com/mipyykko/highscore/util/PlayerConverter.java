@@ -6,7 +6,7 @@
 package com.mipyykko.highscore.util;
 
 import com.mipyykko.highscore.domain.Player;
-import com.mipyykko.highscore.domain.FormPlayer;
+import com.mipyykko.highscore.domain.forms.FormPlayer;
 
 /**
  *

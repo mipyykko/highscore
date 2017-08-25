@@ -11,23 +11,23 @@ import com.mipyykko.highscore.domain.Player;
  *
  * @author pyykkomi
  */
-public class CountPlayer implements Comparable<CountPlayer> {
-    Player player;
+public class CountObject implements Comparable<CountObject> {
+    Object object;
     Long count;
 
-    protected CountPlayer() {}
+    protected CountObject() {}
     
-    public CountPlayer(Player player, Long count) {
-        this.player = player;
+    public CountObject(Object object, Long count) {
+        this.object = object;
         this.count = count;
     }
 
-    public Player getPlayer() {
-        return player;
+    public Object getObject() {
+        return object;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setObject(Object object) {
+        this.object = object;
     }
 
     public Long getCount() {
@@ -39,7 +39,7 @@ public class CountPlayer implements Comparable<CountPlayer> {
     }
 
     @Override
-    public int compareTo(CountPlayer o) {
+    public int compareTo(CountObject o) {
         return -this.count.compareTo(o.count);
     }
 

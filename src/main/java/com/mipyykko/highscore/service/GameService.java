@@ -9,12 +9,11 @@ import com.mipyykko.highscore.domain.Game;
 import com.mipyykko.highscore.repository.GameRepository;
 import com.mipyykko.highscore.repository.PlayerRepository;
 import com.mipyykko.highscore.repository.ScoreRepository;
-import com.mipyykko.highscore.util.CountGame;
+import com.mipyykko.highscore.util.CountObject;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -46,10 +45,10 @@ public class GameService {
     }
     
     public Map<Game, Long> getPopularGames() {
-        List<CountGame> list = playerRepository.findMostPopularGames();
+        List<CountObject> list = playerRepository.findMostPopularGames();
         Collections.sort(list);
         Map<Game, Long> map = new LinkedHashMap<>();
-        list.forEach(cg -> map.put(cg.getGame(), cg.getCount()));
+        list.forEach(cg -> map.put((Game) cg.getObject(), cg.getCount()));
         return map;
     }
     

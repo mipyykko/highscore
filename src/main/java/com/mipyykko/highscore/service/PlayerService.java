@@ -8,7 +8,7 @@ package com.mipyykko.highscore.service;
 import com.mipyykko.highscore.domain.Game;
 import com.mipyykko.highscore.domain.Player;
 import com.mipyykko.highscore.repository.PlayerRepository;
-import com.mipyykko.highscore.util.CountPlayer;
+import com.mipyykko.highscore.util.CountObject;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -69,10 +69,10 @@ public class PlayerService {
         return player.getScores().stream().map(score -> score.getGame()).distinct().collect(Collectors.toList());
     }
     public Map<Player, Long> getMostActivePlayers() {
-        List<CountPlayer> players = playerRepository.findMostActivePlayers();
+        List<CountObject> players = playerRepository.findMostActivePlayers();
         Collections.sort(players);
         Map<Player, Long> map = new LinkedHashMap<>();
-        players.forEach(cp -> map.put(cp.getPlayer(), cp.getCount()));
+        players.forEach(cp -> map.put((Player) cp.getObject(), cp.getCount()));
         return map;
     }
     

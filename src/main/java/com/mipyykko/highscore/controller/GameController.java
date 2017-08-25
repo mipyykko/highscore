@@ -178,7 +178,7 @@ public class GameController {
         }
         
         if (bindingResult.hasErrors()) {
-            return "redirect:/games/edit/" + game.getId();
+            return "editgame"; //redirect:/games/edit/" + game.getId();
         }
         
         gameService.update(game);

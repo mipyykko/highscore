@@ -33,10 +33,13 @@ public class ProductionSecurityConfiguration extends WebSecurityConfigurerAdapte
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.headers().frameOptions().sameOrigin();
-
+        http.exceptionHandling().accessDeniedPage("/");
+        
         http.authorizeRequests()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/scores/pending*/**").hasAuthority("ADMIN")
+                .antMatchers("/games/add").authenticated()
+                .antMatchers(HttpMethod.POST, "/", "/players*/**", "/scores*/**").authenticated()
                 .antMatchers("/", "/login", "/logout", "/register", "/scores*/**", "/static*/**", "/css/**", "/js/**", "/images/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/", "/players*/**" ,"/games*/**").permitAll()
                 .anyRequest().authenticated();

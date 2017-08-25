@@ -15,7 +15,7 @@ import com.mipyykko.highscore.service.GameService;
 import com.mipyykko.highscore.service.PlayerService;
 import com.mipyykko.highscore.service.ScoreService;
 import com.mipyykko.highscore.util.CountGame;
-import com.mipyykko.highscore.util.CountPlayer;
+import com.mipyykko.highscore.util.CountObject;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;

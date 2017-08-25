@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mipyykko.highscore.domain;
+package com.mipyykko.highscore.domain.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;

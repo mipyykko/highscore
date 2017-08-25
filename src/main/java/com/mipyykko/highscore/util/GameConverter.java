@@ -5,7 +5,7 @@
  */
 package com.mipyykko.highscore.util;
 
-import com.mipyykko.highscore.domain.FormGame;
+import com.mipyykko.highscore.domain.forms.FormGame;
 import com.mipyykko.highscore.domain.Game;
 import com.mipyykko.highscore.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
