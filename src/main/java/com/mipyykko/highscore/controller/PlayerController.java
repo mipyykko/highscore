@@ -85,12 +85,13 @@ public class PlayerController {
         Player player = PlayerConverter.toPlayer(formPlayer);
         playerService.save(player);
         
-        Authentication user = new UsernamePasswordAuthenticationToken(player.getUsername(), player.getPassword());
-        SecurityContextHolder
-                .getContext()
-                .setAuthentication(
-                        jpaAuthenticationProvider
-                                .authenticate(user));
+        // automatically logging in disabled due to no worky
+//        Authentication user = new UsernamePasswordAuthenticationToken(player.getUsername(), player.getPassword());
+//        SecurityContextHolder
+//                .getContext()
+//                .setAuthentication(
+//                        jpaAuthenticationProvider
+//                                .authenticate(user));
         return "redirect:/";
     }
 

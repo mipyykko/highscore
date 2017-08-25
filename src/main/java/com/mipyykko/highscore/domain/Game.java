@@ -31,7 +31,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 @Table(uniqueConstraints = {
     @UniqueConstraint(columnNames = {"name", "publisher", "published_year"})
 })
-public class Game extends AbstractPersistable<Long>/* implements Comparable<Game> */{
+public class Game extends AbstractPersistable<Long> implements Comparable<Game> {
     
     @NotBlank(message = "Name cannot be empty!")
     @Length(max = 128, message = "Name can be at most 128 characters")
@@ -145,7 +145,7 @@ public class Game extends AbstractPersistable<Long>/* implements Comparable<Game
         return true;
     }
 
-//    @Override
+    @Override
     public int compareTo(Game o) {
         return this.hashCode() - o.hashCode();
     }
