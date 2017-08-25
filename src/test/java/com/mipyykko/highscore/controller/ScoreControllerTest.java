@@ -122,7 +122,6 @@ public class ScoreControllerTest {
                .param("score", "7") // large enough to not overwrite existing test scores :x
                .param("score.game", "1")
                .param("score.game.id", "1"))
-               .andDo(print())
                .andExpect(status().is3xxRedirection())
                .andExpect(model().hasNoErrors());
         

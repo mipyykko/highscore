@@ -34,7 +34,7 @@ public class Score extends AbstractPersistable<Long> implements Comparable<Score
     @NotEmpty(message = "Score can not be empty!")
     private String scoreValue;
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date scoreDate;
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:ss")

@@ -269,7 +269,6 @@ public class GameControllerTest {
                     .param("name", game1.getName())
                     .param("publisher",game1.getPublisher())
                     .param("publishedYear", game1.getPublishedYear()))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attributeHasFieldErrors("formGame", "uniqueness"));
         mockMvc.perform(post("/games/edit").with(user("admin").password("password"))
