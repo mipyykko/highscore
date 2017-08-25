@@ -22,7 +22,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                     <div class="col-md-6 spansecound">
                         <div class="span1">
                             <h3 class="tlt"><a th:href="@{/games}">Most popular games</a></h3>
-                            <div class="weather_by_days" th:if="${#lists.isEmpty(popularGames)">
+                            <div class="weather_by_days" th:if="${#lists.isEmpty(popularGames)}">
                                 <p>No games with accepted scores yet!</p>
                             </div>
                             <div class="weather_by_days" th:each="game : ${popularGames}">
@@ -40,7 +40,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                     <div class="col-md-6 spanthird">
                         <div class="span1">
                             <h3 class="tlt"><a th:href="@{/players}">Most active players</a></h3>
-                            <div class="weather_by_days" th:if="${#lists.isEmpty(activePlayers)">
+                            <div class="weather_by_days" th:if="${#lists.isEmpty(activePlayers)}">
                                 <p>No players yet!</p>
                             </div>
                             <div class="weather_by_days" th:each="player : ${activePlayers}">
