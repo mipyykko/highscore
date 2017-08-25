@@ -214,7 +214,6 @@ public class GameControllerTest {
     public void testHandleAddGame() throws Exception {
         Game game1 = gameService.get(1l);
         mockMvc.perform(postAnonymousGamesForm("anything", "", ""))
-            .andDo(print())
             .andExpect(status().is3xxRedirection());
         
         assertNull(gameService.findByName("anything"));
@@ -222,12 +221,10 @@ public class GameControllerTest {
         mockMvc.perform(postLoggedInGamesForm(
                 game1.getName(), game1.getPublisher(), game1.getPublishedYear(), 
                 "admin", "password"))
-            .andDo(print())
             .andExpect(status().isOk())
             .andExpect(model().attributeHasFieldErrors("formGame", "uniqueness"));
 
         mockMvc.perform(postLoggedInGamesForm("", "", "", "admin", "password"))
-            .andDo(print())
             .andExpect(status().isOk())
             .andExpect(model().attributeHasFieldErrors("formGame", "name"));
 

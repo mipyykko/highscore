@@ -54,24 +54,12 @@ public class DefaultControllerTest {
     
     private MockMvc mockMvc;
     
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
     @Before
     public void setUp() {
         this.mockMvc = MockMvcBuilders
                 .webAppContextSetup(webAppContext)
                 .addFilters(springSecurityFilterChain)
                 .build();
-    }
-    
-    @After
-    public void tearDown() {
     }
 
     @Test

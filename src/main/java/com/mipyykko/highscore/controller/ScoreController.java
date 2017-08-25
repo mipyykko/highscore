@@ -80,6 +80,10 @@ public class ScoreController {
     
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String handleAddScore(Model model, @Valid @ModelAttribute Score score, BindingResult bindingResult) {
+        if (playerService.getAuthenticatedPlayer() == null) {
+            return "redirect:/games";
+        }
+        
         score.setSentDate(new Date(System.currentTimeMillis()));
 
         if (score.getScoreDate() == null) {
@@ -95,9 +99,9 @@ public class ScoreController {
             return showAddScore(model, score.getGame().getId(), score);
         }
  
-        scoreService.save(score);
+        score = scoreService.save(score);
         
-        return "redirect:/games/" + score.getGame().getId();
+        return "redirect:/games/" + (score.getGame() == null ? "" : score.getGame().getId());
     }
     
     @RequestMapping(value = "/pending", method = RequestMethod.GET)
