@@ -169,13 +169,13 @@ public class GameServiceTest {
         Game game4 = new Game("test4", "not equal", "1998");
         Game game5 = new Game("test4", "Game Company", "not equal");
         
-        assertTrue(!gameService.findSimilar(game2).isEmpty());
+        assertTrue(!gameService.findSimilar(game2.getName(), game2.getPublisher(), game2.getPublishedYear()).isEmpty());
 
-        assertEquals(gameService.findSimilar(game2).get(0).getName(), game1.getName());
+        assertEquals(gameService.findSimilar(game2.getName(), game2.getPublisher(), game2.getPublishedYear()).get(0).getName(), game1.getName());
         
-        assertTrue(gameService.findSimilar(game3).isEmpty());
-        assertTrue(gameService.findSimilar(game4).isEmpty());
-        assertTrue(gameService.findSimilar(game5).isEmpty());
+        assertTrue(gameService.findSimilar(game3.getName(), game3.getPublisher(), game3.getPublishedYear()).isEmpty());
+        assertTrue(gameService.findSimilar(game4.getName(), game4.getPublisher(), game4.getPublishedYear()).isEmpty());
+        assertTrue(gameService.findSimilar(game5.getName(), game5.getPublisher(), game5.getPublishedYear()).isEmpty());
 
         gameRepository.delete(game1);
     }

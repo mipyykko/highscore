@@ -14,6 +14,9 @@
                             <h3 th:text="${game.name}">name</h3>
                             <h5 th:text="${game.publisher}">publisher</h5>
                             <h6 th:text="${game.publishedYear}">year</h6>
+                            <div class="weather_by_days" th:if="${#lists.isEmpty(scores)}">
+                                <p>No scores submitted or accepted!</p>
+                            </div>
                             <div class="weather_by_days" th:each="score : ${scores}">
                                 <div th:if="${score.isAccepted()} or ${currentuser.isAdmin()} or ${currentuser.id == score.player.id}" class="weather_by_day">
                                     <p class="w-day" th:style="not ${score.isAccepted()} ? 'font-style: italic' : ''">

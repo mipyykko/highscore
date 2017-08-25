@@ -26,6 +26,7 @@ import org.hibernate.validator.constraints.ScriptAssert;
  */
 public class FormPlayer {
 
+    private Long id;
     @NotBlank
     @Length(min = 4, max = 24, message = "Username must be 4 to 24 letters!")
     private String username;
@@ -40,13 +41,23 @@ public class FormPlayer {
     private String email;
     private String description;
 
-    public FormPlayer() {}
+    public FormPlayer() { 
+        this.id = null; 
+    }
 
     public FormPlayer(String username, String name, String email, String description) {
         this.username = username;
         this.name = name;
         this.email = email;
         this.description = description;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
     
     public String getUsername() {

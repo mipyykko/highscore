@@ -26,8 +26,13 @@ public class GameConverter {
             return null;
         }
 
-        Game game = gameService.get(formGame.getId());
-
+        Game game;
+        if (formGame.getId() == null) {
+            game = new Game();
+        } else {
+            game = gameService.get(formGame.getId());
+        }
+        
         game.setName(formGame.getName());
         game.setPublisher(formGame.getPublisher());
         game.setPublishedYear(formGame.getPublishedYear());
@@ -40,7 +45,7 @@ public class GameConverter {
             return null;
         }
         
-        FormGame formGame = new FormGame(game.getName(), game.getPublisher(), game.getPublishedYear());
+        FormGame formGame = new FormGame(game);
         formGame.setId(game.getId());
         return formGame;
     }

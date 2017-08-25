@@ -50,6 +50,10 @@ public class PlayerService {
         return playerRepository.findOne(id);
     }
     
+    public Player getByUsername(String username) {
+        return playerRepository.findByUsername(username);
+    }
+    
     @Transactional
     public Player save(Player player) {
         return playerRepository.save(player);

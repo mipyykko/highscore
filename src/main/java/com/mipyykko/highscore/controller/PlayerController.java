@@ -18,6 +18,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.lang.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -138,6 +139,11 @@ public class PlayerController {
         Player player = playerService.getAuthenticatedPlayer();
         if (player == null) {
             return "redirect:/";
+        }
+
+        Player checkPlayer = playerService.getByUsername(formPlayer.getUsername().trim());
+        if (checkPlayer != null && !checkPlayer.getId().equals(formPlayer.getId())) {
+            bindingResult.rejectValue("username", "error.player", "This username already exists!");
         }
         
         if (formPlayer.getOldpassword() != null && !formPlayer.getOldpassword().isEmpty()) {

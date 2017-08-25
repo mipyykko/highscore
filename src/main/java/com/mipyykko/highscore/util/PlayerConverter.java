@@ -34,6 +34,7 @@ public class PlayerConverter {
         FormPlayer formPlayer = 
                 new FormPlayer(player.getUsername(), player.getName(),
                                       player.getEmail(), player.getDescription());
+        formPlayer.setId(player.getId());
         return formPlayer;
     }
 }

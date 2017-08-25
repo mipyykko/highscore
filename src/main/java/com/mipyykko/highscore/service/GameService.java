@@ -65,8 +65,8 @@ public class GameService {
         return gameRepository.findAll(pageable);
     }
     
-    public List<Game> findSimilar(Game game) {
-        return gameRepository.findByNameAndPublisherAndPublishedYear(game.getName(), game.getPublisher(), game.getPublishedYear());
+    public List<Game> findSimilar(String name, String publisher, String publishedYear) {
+        return gameRepository.findByNameAndPublisherAndPublishedYear(name, publisher, publishedYear);
     }
     
     public Game findByName(String name) {

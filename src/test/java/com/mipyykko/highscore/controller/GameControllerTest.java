@@ -7,6 +7,7 @@ package com.mipyykko.highscore.controller;
 
 import com.mipyykko.highscore.domain.Game;
 import com.mipyykko.highscore.domain.Score;
+import com.mipyykko.highscore.domain.forms.FormGame;
 import com.mipyykko.highscore.service.GameService;
 import com.mipyykko.highscore.service.PlayerService;
 import java.util.List;
@@ -23,7 +24,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Matchers;
-import static org.mockito.Mockito.mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -190,9 +190,9 @@ public class GameControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getModelAndView().getModel();
 
-        assertTrue(model.containsKey("game"));
-        assertNotNull(model.get("game"));
-        assertTrue(model.get("game") instanceof Game);
+        assertTrue(model.containsKey("formGame"));
+        assertNotNull(model.get("formGame"));
+        assertTrue(model.get("formGame") instanceof FormGame);
         
         Game game = gameService.get(1l);
         
@@ -224,12 +224,12 @@ public class GameControllerTest {
                 "admin", "password"))
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(model().attributeHasFieldErrors("game", "uniqueness"));
+            .andExpect(model().attributeHasFieldErrors("formGame", "uniqueness"));
 
         mockMvc.perform(postLoggedInGamesForm("", "", "", "admin", "password"))
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(model().attributeHasFieldErrors("game", "name"));
+            .andExpect(model().attributeHasFieldErrors("formGame", "name"));
 
         mockMvc.perform(postLoggedInGamesForm("acceptable", "", "", "admin", "password"))
             .andExpect(status().is3xxRedirection())

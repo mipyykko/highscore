@@ -5,15 +5,7 @@
  */
 package com.mipyykko.highscore.domain.forms;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import com.mipyykko.highscore.domain.Game;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -33,10 +25,15 @@ public class FormGame {
     // for error
     private String uniqueness;
     
-    public FormGame(String name, String publisher, String publishedYear) {
-        this.name = name;
-        this.publisher = publisher;
-        this.publishedYear = publishedYear;
+    public FormGame() {
+        id = null;
+    }
+    
+    public FormGame(Game game) {
+        this.id = game.getId();
+        this.name = game.getName();
+        this.publisher = game.getPublisher();
+        this.publishedYear = game.getPublishedYear();
     }
 
     public Long getId() {

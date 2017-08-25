@@ -12,7 +12,7 @@
                     <div class="col-md-6 spansecound">
                         <div class="span1">
                             <h2>Edit game</h2>
-                            <form id="gameForm" th:action="@{/games/edit}" th:object="${game}" method="POST">
+                            <form id="gameForm" th:action="@{/games/edit}" th:object="${formGame}" method="POST">
                                 <fieldset id="body">
                                     <fieldset>
                                         <p class="error" th:if="${#fields.hasErrors('uniqueness')}" th:errors="*{uniqueness}">combo error</p>

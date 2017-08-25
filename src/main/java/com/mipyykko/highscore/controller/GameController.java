@@ -9,9 +9,11 @@ import com.mipyykko.highscore.controller.common.HeaderInfo;
 import com.mipyykko.highscore.domain.Game;
 import com.mipyykko.highscore.domain.Player;
 import com.mipyykko.highscore.domain.Score;
+import com.mipyykko.highscore.domain.forms.FormGame;
 import com.mipyykko.highscore.service.GameService;
 import com.mipyykko.highscore.service.PlayerService;
 import com.mipyykko.highscore.service.ScoreService;
+import com.mipyykko.highscore.util.GameConverter;
 import com.mipyykko.highscore.util.Pager;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -48,6 +50,8 @@ public class GameController {
     private ScoreService scoreService;
     @Autowired
     private HeaderInfo headerInfo;
+    @Autowired
+    private GameConverter gameConverter;
     
     @ModelAttribute
     public void addHeaderAttributes(Model model) {
@@ -117,14 +121,14 @@ public class GameController {
     }
     
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String showAddGame(Model model, @ModelAttribute Game game, SessionStatus sessionStatus) {
+    public String showAddGame(Model model, @ModelAttribute FormGame formGame, SessionStatus sessionStatus) {
         Player player = playerService.getAuthenticatedPlayer();
         
         if (player == null) {
             return "redirect:/";
         }
         
-        model.addAttribute("game", game);
+        model.addAttribute("formGame", formGame);
         return "addgame";
     }
     
@@ -132,22 +136,22 @@ public class GameController {
     public String showEditGame(Model model, @PathVariable Long id) {
         Game game = gameService.get(id);
         if (game == null || playerService.getAuthenticatedPlayer() == null) {
-            return "redirect:/";
+            return "redirect:/games";
         }
-        model.addAttribute("game", game);
+        model.addAttribute("formGame", gameConverter.toFormGame(game));
         
         return "editgame";
     }
     
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String handleAddGame(Model model, 
-            @Validated @ModelAttribute Game game, 
+            @Validated @ModelAttribute FormGame formGame, 
             BindingResult bindingResult) {
         if (playerService.getAuthenticatedPlayer() == null) {
             return "redirect:/";
         }
         
-        if (!gameService.findSimilar(game).isEmpty()) {
+        if (!gameService.findSimilar(formGame.getName(), formGame.getPublisher(), formGame.getPublishedYear()).isEmpty()) {
             bindingResult.rejectValue("uniqueness", "errors.game", "Game is not unique enough!");
         }
 
@@ -155,22 +159,23 @@ public class GameController {
             return "addgame";
         }
         
-        gameService.save(game);
-        return "redirect:/";
+        gameService.save(gameConverter.toGame(formGame));
+        return "redirect:/games";
     }
     
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String handleEditGame(Model model, 
-            @Validated @ModelAttribute Game game,
+            @Validated @ModelAttribute FormGame formGame,
             BindingResult bindingResult) {
         if (playerService.getAuthenticatedPlayer() == null) {
             return "redirect:/";
         }
 
-        List<Game> similar = gameService.findSimilar(game);
+        List<Game> similar = gameService.findSimilar(formGame.getName(), 
+                formGame.getPublisher(), formGame.getPublishedYear());
         if (!similar.isEmpty()) {
             for (Game g : similar) {
-                if (!g.getId().equals(game.getId())) {
+                if (!g.getId().equals(formGame.getId())) {
                     bindingResult.rejectValue("uniqueness", "errors.game", "Game is not unique enough!");
                     break;
                 }
@@ -178,10 +183,10 @@ public class GameController {
         }
         
         if (bindingResult.hasErrors()) {
-            return "editgame"; //redirect:/games/edit/" + game.getId();
+            return "editgame";
         }
         
-        gameService.update(game);
-        return "redirect:/games/" + game.getId();
+        gameService.update(gameConverter.toGame(formGame));
+        return "redirect:/games/" + formGame.getId();
     }
 }
