@@ -135,7 +135,7 @@ public class GameController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String showEditGame(Model model, @PathVariable Long id) {
         Game game = gameService.get(id);
-        if (game == null || playerService.getAuthenticatedPlayer() == null) {
+        if (game == null || !playerService.isAdmin()) {
             return "redirect:/games";
         }
         model.addAttribute("formGame", gameConverter.toFormGame(game));
@@ -167,7 +167,7 @@ public class GameController {
     public String handleEditGame(Model model, 
             @Validated @ModelAttribute FormGame formGame,
             BindingResult bindingResult) {
-        if (playerService.getAuthenticatedPlayer() == null) {
+        if (!playerService.isAdmin()) {
             return "redirect:/";
         }
 

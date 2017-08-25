@@ -76,7 +76,7 @@ public class GameControllerTest {
     
     private MockHttpServletRequestBuilder postAnonymousGamesForm(
             String name, String publisher, String publishedYear) {
-        return post("/games/add").sessionAttr("game", new Game())
+        return post("/games/add")
                 .param("name", name)
                 .param("publisher", publisher)
                 .param("publishedYear", publishedYear)
@@ -86,7 +86,7 @@ public class GameControllerTest {
     
     private MockHttpServletRequestBuilder postLoggedInGamesForm(
             String name, String publisher, String publishedYear, String user, String password) {
-        return post("/games/add").sessionAttr("game", new Game()).with(user(user).password(password))
+        return post("/games/add").with(user(user).password(password))
                 .param("name", name)
                 .param("publisher", publisher)
                 .param("publishedYear", publishedYear)
@@ -183,10 +183,10 @@ public class GameControllerTest {
     
     @Test
     public void testShowAddGame() throws Exception {
-        mockMvc.perform(get("/games/add").sessionAttr("game", new Game()))
+        mockMvc.perform(get("/games/add"))
                 .andExpect(status().is3xxRedirection());
         Map<String, Object> model = 
-            mockMvc.perform(get("/games/add").sessionAttr("game", new Game()).with(user("test1").password("password")))
+            mockMvc.perform(get("/games/add").with(user("test1").password("password")))
                 .andExpect(status().isOk())
                 .andReturn().getModelAndView().getModel();
 
@@ -236,5 +236,59 @@ public class GameControllerTest {
             .andExpect(model().hasNoErrors());
         
         assertNotNull(gameService.findByName("acceptable"));
+    }
+    
+    @Test
+    public void testShowEditGame() throws Exception {
+        mockMvc.perform(get("/games/edit/1"))
+                .andExpect(status().is3xxRedirection());
+        mockMvc.perform(get("/games/edit/666").with(user("test1").password("password")))
+                .andExpect(status().is3xxRedirection());
+        mockMvc.perform(get("/games/edit/1").with(user("test1").password("password")))
+                .andExpect(status().is3xxRedirection());
+        
+        mockMvc.perform(get("/games/edit/1").with(user("admin").password("password")))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("formGame"))
+                .andExpect(content().string(containsString("Peli 1")));
+    }
+    
+    @Test
+    public void testHandleEditGame() throws Exception {
+        Game game1 = gameService.get(1l);
+        mockMvc.perform(post("/games/edit")
+                    .param("name", "anything")
+                    .param("publisher", "")
+                    .param("publishedYear", ""))
+                .andExpect(status().is3xxRedirection());
+        mockMvc.perform(post("/games/edit").with(user("test1").password("password"))
+                    .param("id", "1")
+                    .param("name", "anything")
+                    .param("publisher", "")
+                    .param("publishedYear", ""))
+                .andExpect(status().is3xxRedirection());
+        mockMvc.perform(post("/games/edit").with(user("admin").password("password"))
+                    .param("id", "2")
+                    .param("name", game1.getName())
+                    .param("publisher",game1.getPublisher())
+                    .param("publishedYear", game1.getPublishedYear()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attributeHasFieldErrors("formGame", "uniqueness"));
+        mockMvc.perform(post("/games/edit").with(user("admin").password("password"))
+                    .param("id", "1")
+                    .param("name", ""))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeHasFieldErrors("formGame", "name"));
+        mockMvc.perform(post("/games/edit").with(user("admin").password("password"))
+                    .param("id", "1")
+                    .param("name", "changed"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(model().hasNoErrors());
+        
+        Game compareGame = gameService.get(1l);
+        assertEquals("changed", compareGame.getName());
+        game1.setName("Peli 1");
+        gameService.update(game1); // I thought these would roll back :x
     }
 }

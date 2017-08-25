@@ -45,6 +45,7 @@ public class DefaultSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/scores/pending*/**").hasAuthority("ADMIN")
                 .antMatchers("/games/add").authenticated()
+                .antMatchers("/games/edit").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.POST, "/", "/players*/**", "/scores*/**").authenticated()
                 .antMatchers("/", "/login", "/logout", "/register", "/scores*/**", "/static*/**", "/css/**", "/js/**", "/images/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/", "/players*/**" ,"/games*/**").permitAll()
