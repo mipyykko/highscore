@@ -94,6 +94,14 @@ public class ScoreController {
             bindingResult.rejectValue("scoreDate", "errors.score", "Date cannot be in the future!");
         }
         
+        // last minute fix
+        if (score.getGame() != null && score.getGame().getScoreType() == Game.ScoreType.LONG) {
+            try {
+                Long testNumberFormat = Long.parseLong(score.getScoreValue());
+            } catch (Exception e) {
+                bindingResult.rejectValue("scoreValue", "errors.score", "This score must be in a numeric format!");
+            }
+        }
 
         if (bindingResult.hasErrors()) {
             return showAddScore(model, score.getGame().getId(), score);
